@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "763351344149",
+    "firebase_url": "https://parecer-edu.firebaseio.com",
+    "project_id": "parecer-edu",
+    "storage_bucket": "parecer-edu.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:763351344149:android:1c7222fc21935dee6fda1c",
+        "android_client_info": {
+          "package_name": "com.slabs.pareceredu"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "763351344149-g84bso55psd6q58nfo1r08iqb0ug99so.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMs5_RNOdEqat8s-1z-CKaLYU8ZDZgQTU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "763351344149-g84bso55psd6q58nfo1r08iqb0ug99so.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
