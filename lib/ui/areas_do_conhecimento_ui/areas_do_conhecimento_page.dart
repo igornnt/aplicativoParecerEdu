@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:parecer_app/ui/criterios_ui/linguagens_ui/criterios_linguagens_page.dart';
+import 'package:aplicativoescolas/ui/criterios_ui/linguagens_ui/criterios_linguagens_page.dart';
 
 class AreasConhecimentoView extends StatelessWidget {
-
   bool avaliar = false;
   String escolaId;
   String turmaId;
 
-  AreasConhecimentoView(String escolaID, turmaID,{bool avaliar}){
+  AreasConhecimentoView(String escolaID, turmaID, {bool avaliar}) {
     this.escolaId = escolaID;
     this.turmaId = turmaID;
     this.avaliar = avaliar;
@@ -22,30 +21,32 @@ class AreasConhecimentoView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Áreas do conhecimento"),),
+      appBar: AppBar(
+        title: Text("Áreas do conhecimento"),
+      ),
       body: Column(
         children: <Widget>[
           //Linguagens
           Padding(
-            padding: const EdgeInsets.only(left: 12.0,bottom: 12.0,right: 12.0,top: 25.0),
+            padding: const EdgeInsets.only(
+                left: 12.0, bottom: 12.0, right: 12.0, top: 25.0),
             child: InkWell(
-              onTap: (){
-                Navigator.push(context,
+              onTap: () {
+                Navigator.push(
+                    context,
                     MaterialPageRoute(
-                      builder: (context) => CriterioLinguagensView(turmaID: turmaId,
-                          escolaID: escolaId, titulo: linguagens),
-                    )
-                );
+                      builder: (context) => CriterioLinguagensView(
+                          turmaID: turmaId,
+                          escolaID: escolaId,
+                          titulo: linguagens),
+                    ));
               },
               splashColor: Colors.blue,
               child: Container(
                 height: 80,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(2.0),
-                  border: Border.all(
-                      color: Colors.blue,
-                      width: 1
-                  ),
+                  border: Border.all(color: Colors.blue, width: 1),
                 ),
                 child: Center(
                   child: textoPersonalizado(linguagens),
@@ -57,16 +58,13 @@ class AreasConhecimentoView extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: InkWell(
-              onTap: (){},
+              onTap: () {},
               splashColor: Colors.blue,
               child: Container(
                 height: 80,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(2.0),
-                  border: Border.all(
-                      color: Colors.blue,
-                      width: 1
-                  ),
+                  border: Border.all(color: Colors.blue, width: 1),
                 ),
                 child: Center(
                   child: textoPersonalizado(cienciasHumanas),
@@ -78,16 +76,13 @@ class AreasConhecimentoView extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: InkWell(
-              onTap: (){},
+              onTap: () {},
               splashColor: Colors.blue,
               child: Container(
                 height: 80,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(2.0),
-                  border: Border.all(
-                      color: Colors.blue,
-                      width: 1
-                  ),
+                  border: Border.all(color: Colors.blue, width: 1),
                 ),
                 child: Center(
                   child: textoPersonalizado(cienciasDaNatureza),
@@ -99,16 +94,13 @@ class AreasConhecimentoView extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: InkWell(
-              onTap: (){},
+              onTap: () {},
               splashColor: Colors.blue,
               child: Container(
                 height: 80,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(2.0),
-                  border: Border.all(
-                      color: Colors.blue,
-                      width: 1
-                  ),
+                  border: Border.all(color: Colors.blue, width: 1),
                 ),
                 child: Center(
                   child: textoPersonalizado(matematica),
@@ -120,18 +112,13 @@ class AreasConhecimentoView extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: InkWell(
-              onTap: (){
-
-              },
+              onTap: () {},
               splashColor: Colors.blue,
               child: Container(
                 height: 80,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(2.0),
-                  border: Border.all(
-                      color: Colors.blue,
-                      width: 1
-                  ),
+                  border: Border.all(color: Colors.blue, width: 1),
                 ),
                 child: Center(
                   child: textoPersonalizado(ensinoReligioso),
@@ -144,14 +131,10 @@ class AreasConhecimentoView extends StatelessWidget {
     );
   }
 
-  Widget textoPersonalizado(String titulo){
-
-    return Text(titulo, style: TextStyle(
-      fontSize: 17
-    ),);
-
+  Widget textoPersonalizado(String titulo) {
+    return Text(
+      titulo,
+      style: TextStyle(fontSize: 17),
+    );
   }
-
 }
-
-

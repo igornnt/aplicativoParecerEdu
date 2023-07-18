@@ -27,25 +27,28 @@ dependencies:
   path_provider: ^1.6.5
   toast: ^0.1.5
   flutter_slidable: ^0.5.3
-  flutter_progress_button: '^1.0.0'
+  flutter_progress_button: "^1.0.0"
   fl_chart: ^0.9.3
   introduction_screen: ^1.0.8
   shared_preferences: ^0.5.7+1
-
-
-
+  flutter_svg: ^0.19.3
+  platform: ^3.1.0
+  intl: ^0.15.7
+  open_file: ^3.1.0
+  syncfusion_flutter_charts: ^18.4.49
+  syncfusion_flutter_pdf: ^18.4.49-beta
+  permission_handler: ^5.1.0+2
+  file_picker: ^2.1.7
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -69,6 +72,7 @@ flutter:
     - resource/deslizar.png
     - resource/mais.png
     - resource/logo.png
+    - resource/school.jpg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
@@ -94,3 +98,5 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+module:
+  androidX: true

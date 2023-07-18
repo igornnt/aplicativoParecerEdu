@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:parecer_app/models/aluno_model.dart';
-import 'package:parecer_app/repositories/alunos_data_repository.dart';
+import 'package:aplicativoescolas/models/aluno_model.dart';
+import 'package:aplicativoescolas/repositories/alunos_data_repository.dart';
 import 'package:toast/toast.dart';
 
 class AdicionarAlunoView extends StatefulWidget {
@@ -93,13 +93,13 @@ class _AdicionarAlunoViewState extends State<AdicionarAlunoView> {
                         )
                       ],
                       child: Container(
-                          decoration: BoxDecoration(
-                            border: new BorderDirectional(bottom: BorderSide(
-                              color: Colors.blue.shade100,
-                              width: 1.5,
-                            ),
-                            )
+                        decoration: BoxDecoration(
+                            border: new BorderDirectional(
+                          bottom: BorderSide(
+                            color: Colors.blue.shade100,
+                            width: 1.5,
                           ),
+                        )),
                         child: ListTile(
                           title: Text(alunos[index].getNomeAluno()),
                         ),
@@ -153,28 +153,26 @@ class _AdicionarAlunoViewState extends State<AdicionarAlunoView> {
               title: Text("Adicionar Aluno"),
               content: TextField(
                 decoration:
-                InputDecoration(labelText: ("Informe o nome do aluno")),
+                    InputDecoration(labelText: ("Informe o nome do aluno")),
                 controller: _alunoTextEditingController,
               ),
               actions: <Widget>[
-                FlatButton(
+                TextButton(
                   child: Text("Cancelar"),
                   onPressed: () => Navigator.pop(context),
                 ),
-                FlatButton(
+                TextButton(
                     child: Text("Salvar"),
                     onPressed: () {
                       Aluno aluno =
-                      new Aluno(nome: _alunoTextEditingController.text);
+                          new Aluno(nome: _alunoTextEditingController.text);
                       salvarAluno(aluno);
                       Navigator.pop(context);
                       _alunoTextEditingController.text = "";
-                    }
-                )
+                    })
               ],
             );
-          }
-      );
+          });
     }
 
     if (limpar == false) {
@@ -190,11 +188,11 @@ class _AdicionarAlunoViewState extends State<AdicionarAlunoView> {
                 controller: _alunoTextEditingController,
               ),
               actions: <Widget>[
-                FlatButton(
+                TextButton(
                   child: Text("Cancelar"),
                   onPressed: () => Navigator.pop(context),
                 ),
-                FlatButton(
+                TextButton(
                     child: Text("Salvar"),
                     onPressed: () {
                       if (limpar == false) {

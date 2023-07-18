@@ -1,27 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:parecer_app/models/escola_model.dart';
-import 'package:parecer_app/repositories/escolas_data_repository.dart';
+import 'package:aplicativoescolas/models/escola_model.dart';
+import 'package:aplicativoescolas/repositories/escolas_data_repository.dart';
 import 'home_escola_page.dart';
 
 class CadastrarEscolaView extends StatelessWidget {
-
   bool editar;
   String id;
   TextEditingController _textEditingController = TextEditingController();
   EscolasDataRepository _repository = new EscolasDataRepository();
 
-  CadastrarEscolaView({bool editar , String textoParaAtualizar,String id}) {
-
+  CadastrarEscolaView({bool editar, String textoParaAtualizar, String id}) {
     this._textEditingController.text = "";
 
-    if(editar == true) {
+    if (editar == true) {
       this.editar = true;
       this.id = id;
       this._textEditingController.text = textoParaAtualizar;
-    }else{
+    } else {
       this.editar = false;
     }
-
   }
 
   @override
@@ -35,12 +32,12 @@ class CadastrarEscolaView extends StatelessWidget {
     );
   }
 
-  Widget campoCadastroEscola (BuildContext context){
+  Widget campoCadastroEscola(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.only(left: 32, bottom: 0, right: 32, top: 15 ),
+            padding: EdgeInsets.only(left: 32, bottom: 0, right: 32, top: 15),
             child: TextField(
               style: TextStyle(
                 fontSize: 17,
@@ -59,7 +56,6 @@ class CadastrarEscolaView extends StatelessWidget {
               controller: _textEditingController,
             ),
           ),
-
           Padding(
             padding: const EdgeInsets.all(32),
             child: Container(
@@ -67,26 +63,25 @@ class CadastrarEscolaView extends StatelessWidget {
               width: MediaQuery.of(context).size.height,
               child: RaisedButton(
                 color: Colors.blue,
-                child: Text("Cadastrar", style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white
-                ),
+                child: Text(
+                  "Cadastrar",
+                  style: TextStyle(fontSize: 16, color: Colors.white),
                 ),
                 onPressed: () {
-                  if(editar == false){
+                  if (editar == false) {
                     cadastrarNovaEscola();
-                    Navigator.push(context,
+                    Navigator.push(
+                        context,
                         MaterialPageRoute(
                           builder: (context) => HomeInicial(),
-                        )
-                    );
-                  }else
+                        ));
+                  } else
                     atualizarEscola();
-                    Navigator.push(context,
-                        MaterialPageRoute(
-                          builder: (context) => HomeInicial(),
-                        )
-                    );
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => HomeInicial(),
+                      ));
                 },
               ),
             ),
@@ -96,16 +91,15 @@ class CadastrarEscolaView extends StatelessWidget {
     );
   }
 
-  void cadastrarNovaEscola(){
-      String nomeNovaEscola = _textEditingController.text;
-      Escola escolaNova = Escola(nome: nomeNovaEscola);
-      _repository.adiciona(escolaNova.toMap());
+  void cadastrarNovaEscola() {
+    String nomeNovaEscola = _textEditingController.text;
+    Escola escolaNova = Escola(nome: nomeNovaEscola);
+    _repository.adiciona(escolaNova.toMap());
   }
 
-  void atualizarEscola(){
+  void atualizarEscola() {
     String nome = _textEditingController.text;
     Escola escola = Escola(nome: nome);
     _repository.atualiza(escola.toMap(), id);
   }
-
 }

@@ -121,8 +121,9 @@ class _EvaluationActionPageState extends State<EvaluationActionPage> {
 
   @override
   Widget build(BuildContext context) {
-      StudentProvider.db.countStudents(this.knowledge.idTurma)
-      .then((onValue)=> this.qtdStudantes = onValue);
+    StudentProvider.db
+        .countStudents(this.knowledge.idTurma)
+        .then((onValue) => this.qtdStudantes = onValue);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -135,19 +136,19 @@ class _EvaluationActionPageState extends State<EvaluationActionPage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            FlatButton(
+            TextButton(
               onPressed: () {
                 print("Cancelar");
               },
               child: Text(
-                "Cancelar",
+                "Canc",
                 style: TextStyle(fontSize: 15, color: Colors.red),
               ),
             ),
             this.inicio == true
                 ? ProgressButton(
                     defaultWidget: const Text('Confirmar',
-                        style: TextStyle(color: Colors.white)),
+                        style: TextStyle(color: Colors.blue)),
                     progressWidget: const CircularProgressIndicator(
                         backgroundColor: Colors.white),
                     width: 196,
@@ -155,7 +156,7 @@ class _EvaluationActionPageState extends State<EvaluationActionPage> {
                     onPressed: null)
                 : ProgressButton(
                     defaultWidget: const Text('Confirmar',
-                        style: TextStyle(color: Colors.white)),
+                        style: TextStyle(color: Colors.blue)),
                     progressWidget: const CircularProgressIndicator(
                         backgroundColor: Colors.white),
                     width: 196,
@@ -166,7 +167,7 @@ class _EvaluationActionPageState extends State<EvaluationActionPage> {
                           const Duration(milliseconds: 1000), () => 42);
                       return setState(() {
                         reinicio();
-                        if (index < qtdStudantes-1) {
+                        if (index < qtdStudantes - 1) {
                           EvaluationProvider.db.addEvaluationToDatabase(
                               new Evaluation(
                                   idAluno: this.student.id,
@@ -175,8 +176,8 @@ class _EvaluationActionPageState extends State<EvaluationActionPage> {
                                   idClassSchool: this.knowledge.idTurma,
                                   criterio: this.knowledge.criterio,
                                   peso: this.peso));
-                           this.index++;
-                           avaliados ++;
+                          this.index++;
+                          avaliados++;
                         } else {
                           EvaluationProvider.db.addEvaluationToDatabase(
                               new Evaluation(
@@ -185,8 +186,7 @@ class _EvaluationActionPageState extends State<EvaluationActionPage> {
                                   idCriterio: this.knowledge.id,
                                   idClassSchool: this.knowledge.idTurma,
                                   criterio: this.knowledge.criterio,
-                                  peso: this.peso)
-                                  );
+                                  peso: this.peso));
                           Knowledge novo = knowledge;
                           novo.isAvaliado = 1;
                           KnowledgeProvider.db.updateKnowledge(novo);

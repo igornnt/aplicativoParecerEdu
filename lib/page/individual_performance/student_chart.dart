@@ -1,4 +1,3 @@
-
 import 'package:aplicativoescolas/database/student_provider.dart';
 import 'package:aplicativoescolas/model/student.dart';
 import 'package:aplicativoescolas/model/class_school.dart';
@@ -7,17 +6,12 @@ import 'package:flutter/material.dart';
 
 import 'general_indicador.dart';
 
-
 class AlunoViewChart extends StatefulWidget {
-
-
-
   @override
   _AdicionarAlunoViewState createState() => _AdicionarAlunoViewState();
 }
 
 class _AdicionarAlunoViewState extends State<AlunoViewChart> {
-
   List<Student> alunos;
 
   ClassSchool classSchool;
@@ -33,10 +27,11 @@ class _AdicionarAlunoViewState extends State<AlunoViewChart> {
   @override
   Widget build(BuildContext context) {
     classSchool = ModalRoute.of(context).settings.arguments;
-     this.onLoadAlunosComplete(classSchool.id);
+    this.onLoadAlunosComplete(classSchool.id);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Desempenho Individual"),
+        title: Text("Desempenho individual",
+            style: TextStyle(fontWeight: FontWeight.w400)),
         elevation: 0,
       ),
       body: Column(
@@ -46,24 +41,26 @@ class _AdicionarAlunoViewState extends State<AlunoViewChart> {
               itemCount: (this.alunos != null) ? this.alunos.length : 0,
               itemBuilder: (context, index) {
                 return GestureDetector(
-                  onTap:(){
-                     Navigator.push(context,
-                         MaterialPageRoute(
-                         builder: (context) => StudentChartPage(alunos[index])
-                     ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => StudentChartPage(
+                              alunos[index], this.classSchool.name)),
                     );
                   },
                   child: Container(
-                    child:Column(
-                      children: <Widget>[
-                        ListTile(
-                              title: Text(alunos[index].name),
-                              subtitle:Text("Selecione para obter informações"),
-                        ),
-                        Divider(color: Colors.blue,)
-                      ],
-                    )
-                  ),
+                      child: Column(
+                    children: <Widget>[
+                      ListTile(
+                        title: Text(alunos[index].name),
+                        subtitle: Text("Selecione para obter informações"),
+                      ),
+                      Divider(
+                        color: Colors.blue,
+                      ),
+                    ],
+                  )),
                 );
               },
             ),
@@ -75,9 +72,9 @@ class _AdicionarAlunoViewState extends State<AlunoViewChart> {
 
   void onLoadAlunosComplete(int id) {
     StudentProvider.db.getAllStudentsClass(id).then((dados) => {
-      this.setState(() {
-        this.alunos = dados;
-      })
-    });
+          this.setState(() {
+            this.alunos = dados;
+          })
+        });
   }
 }

@@ -17,7 +17,7 @@ class KnowledgeAreasPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Áreas do conhecimento"),
+        title: Text("Critérios", style: TextStyle(fontWeight: FontWeight.w400)),
       ),
       body: SingleChildScrollView(
         child: Column(

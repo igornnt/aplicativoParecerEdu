@@ -7,6 +7,8 @@ import 'package:aplicativoescolas/page/general_performace/pie_chart_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'circular_chart.dart';
+
 class GenneralCriterioPage extends StatefulWidget {
   int area;
   String titulo;
@@ -19,7 +21,6 @@ class GenneralCriterioPage extends StatefulWidget {
 }
 
 class _GenneralCriterioPageState extends State<GenneralCriterioPage> {
-  
   String className;
   int area;
 
@@ -50,9 +51,9 @@ class _GenneralCriterioPageState extends State<GenneralCriterioPage> {
               ),
               Center(
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text("Veja abaixo os indicadores para $className ."),
-                  )),
+                padding: const EdgeInsets.all(8.0),
+                child: Text("Veja abaixo os indicadores para $className ."),
+              )),
               SizedBox(
                 height: 20,
                 width: 50,
@@ -64,11 +65,15 @@ class _GenneralCriterioPageState extends State<GenneralCriterioPage> {
               Container(
                 width: MediaQuery.of(context).size.width,
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Container(
+                      padding: const EdgeInsets.all(15.0),
                       child: FutureBuilder(
                         future: EvaluationProvider.db
-                            .getAllEvaluationIdClassArea(widget.classSchool.id,area),
+                            .getAllEvaluationIdClassArea(
+                                widget.classSchool.id, area),
+                        // ignore: missing_return
                         builder: (BuildContext context,
                             AsyncSnapshot<List<Evaluation>> snapshot) {
                           if (snapshot.connectionState ==
@@ -78,12 +83,15 @@ class _GenneralCriterioPageState extends State<GenneralCriterioPage> {
                                 shrinkWrap: true,
                                 itemCount: snapshot.data.length,
                                 itemBuilder: (context, indice) {
-                                 if (this.indices.length == 0 ) {
+                                  if (this.indices.length == 0) {
                                     DataPorcentagem d = new DataPorcentagem();
-                                    d.idCriterio = snapshot.data[indice].idCriterio;
-                                    indices.add(snapshot.data[indice].idCriterio);
+                                    d.idCriterio =
+                                        snapshot.data[indice].idCriterio;
+                                    indices
+                                        .add(snapshot.data[indice].idCriterio);
                                     snapshot.data.forEach((f) {
-                                      if (snapshot.data[indice].idCriterio == f.idCriterio) {
+                                      if (snapshot.data[indice].idCriterio ==
+                                          f.idCriterio) {
                                         if (f.peso == 0) {
                                           d.naoAtingiuI();
                                         }
@@ -98,63 +106,66 @@ class _GenneralCriterioPageState extends State<GenneralCriterioPage> {
                                     double at = d.resultadoAtingiu();
                                     double atp = d.resultadoParcialmente();
                                     double nat = d.resultadoNaoAtingiu();
+
                                     return Container(
-                                      child: PieChartGeneral(
-                                        criterio: snapshot.data[indice].criterio,
-                                         qtdAtingiu: at,
-                                         qtdAtingiuParcialmente:
-                                             atp,
-                                         qtdNaoAtingiu: nat,
-                                       ),
+                                      child: CircularChart(
+                                        criterio:
+                                            snapshot.data[indice].criterio,
+                                        qtdAtingiu: at,
+                                        qtdAtingiuParcialmente: atp,
+                                        qtdNaoAtingiu: nat,
+                                      ),
                                     );
-                                  }else{
+                                  } else {
                                     // tem um critério no indice
                                     //percorrar o array e veja se o id do critério está lá;
                                     bool esta = false;
-                                    indices.forEach((f){
-                                      if(f == snapshot.data[indice].idCriterio){
+                                    indices.forEach((f) {
+                                      if (f ==
+                                          snapshot.data[indice].idCriterio) {
                                         esta = true;
                                       }
                                     });
 
-                                  if(esta == false){
-                                    print("jsjsijs");
-                                  //adiciona o indice ao array
-                                  indices.add(snapshot.data[indice].idCriterio);
-                                  //cria uma instancia;
-                                   DataPorcentagem d = new DataPorcentagem();
-                                    d.idCriterio = snapshot.data[indice].idCriterio;
-                                  // percorre o array e vê quantas avaliações possui
-                                    snapshot.data.forEach((f) {
-                                      if (d.idCriterio == f.idCriterio) {
-                                        if (f.peso == 0) {
-                                          d.naoAtingiuI();
+                                    if (esta == false) {
+                                      //adiciona o indice ao array
+                                      indices.add(
+                                          snapshot.data[indice].idCriterio);
+                                      //cria uma instancia;
+                                      DataPorcentagem d = new DataPorcentagem();
+                                      d.idCriterio =
+                                          snapshot.data[indice].idCriterio;
+                                      // percorre o array e vê quantas avaliações possui
+                                      snapshot.data.forEach((f) {
+                                        if (d.idCriterio == f.idCriterio) {
+                                          if (f.peso == 0) {
+                                            d.naoAtingiuI();
+                                          }
+                                          if (f.peso == 0.5) {
+                                            d.atingiuParcialmenteI();
+                                          }
+                                          if (f.peso == 1) {
+                                            d.atingiuI();
+                                          }
                                         }
-                                        if (f.peso == 0.5) {
-                                          d.atingiuParcialmenteI();
-                                        }
-                                        if (f.peso == 1) {
-                                          d.atingiuI();
-                                        }
-                                      }
-                                    });
-                                    // copula os resultados
-                                    double at = d.resultadoAtingiu();
-                                    double atp = d.resultadoParcialmente();
-                                    double nat = d.resultadoNaoAtingiu();
-                                    // retorna o resultado
-                                    return Container(
-                                      child: PieChartGeneral(
-                                        criterio: snapshot.data[indice].criterio,
-                                         qtdAtingiu: at,
-                                         qtdAtingiuParcialmente:
-                                             atp,
-                                         qtdNaoAtingiu: nat,
-                                       ),
-                                    );
+                                      });
+                                      // copula os resultados
+                                      double at = d.resultadoAtingiu();
+                                      double atp = d.resultadoParcialmente();
+                                      double nat = d.resultadoNaoAtingiu();
+                                      // retorna o resultado
+                                      return Container(
+                                        child: CircularChart(
+                                          criterio:
+                                              snapshot.data[indice].criterio,
+                                          qtdAtingiu: at,
+                                          qtdAtingiuParcialmente: atp,
+                                          qtdNaoAtingiu: nat,
+                                        ),
+                                      );
+                                    }
+                                    return Container();
                                   }
-                                  return Container();
-                                }
                                 });
                           }
                           if (snapshot.connectionState ==
@@ -171,7 +182,6 @@ class _GenneralCriterioPageState extends State<GenneralCriterioPage> {
           ),
         ));
   }
-
 }
 
 class DataPorcentagem {
@@ -204,15 +214,23 @@ class DataPorcentagem {
   }
 
   double resultadoAtingiu() {
-    return (this.atingiu * 100) / total;
+    double porcentagem =
+        double.parse(((this.atingiu * 100) / this.total).toStringAsFixed(2));
+
+    return porcentagem;
   }
 
   double resultadoParcialmente() {
-    return (this.atingiuParcialmente * 100) / total;
+    double porcentagem = double.parse(
+        ((this.atingiuParcialmente * 100) / this.total).toStringAsFixed(2));
+
+    return porcentagem;
   }
 
   double resultadoNaoAtingiu() {
-    double porcentagem = (this.naoAtingiu * 100) / this.total;
+    double porcentagem =
+        double.parse(((this.naoAtingiu * 100) / this.total).toStringAsFixed(2));
+
     return porcentagem;
   }
 }

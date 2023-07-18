@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:parecer_app/view/CadastrarTurmaView.dart';
-import 'package:parecer_app/view/CardTurmaView.dart';
+import 'package:aplicativoescolas/view/CadastrarTurmaView.dart';
+import 'package:aplicativoescolas/view/CardTurmaView.dart';
 
 import 'CadastrarEscolaView.dart';
 import 'CardEscolaView.dart';
@@ -27,12 +27,12 @@ class _HomeTurmaState extends State<HomeTurma> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          Navigator.push(context,
+        onPressed: () {
+          Navigator.push(
+              context,
               MaterialPageRoute(
                 builder: (context) => AdicionaTurma(),
-              )
-          );
+              ));
         },
         tooltip: "Adicione uma turma",
         child: Icon(Icons.add),
@@ -40,5 +40,3 @@ class _HomeTurmaState extends State<HomeTurma> {
     );
   }
 }
-
-

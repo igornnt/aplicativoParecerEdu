@@ -1,22 +1,17 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:parecer_app/view/AdicionarAlunoView.dart';
+import 'package:aplicativoescolas/view/AdicionarAlunoView.dart';
 
-
-class MenuPrincipal extends StatelessWidget{
+class MenuPrincipal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
       body: GridLayout(),
     );
-
   }
 }
 
 class GridLayout extends StatelessWidget {
-
   List<String> grids = [
     "alunos",
     "criterios",
@@ -46,15 +41,16 @@ class GridLayout extends StatelessWidget {
           child: GridView(
             //Pesquisar essa função
             physics: BouncingScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+            gridDelegate:
+                SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
             children: [
               GestureDetector(
-                onTap: (){
-                  Navigator.push(context,
+                onTap: () {
+                  Navigator.push(
+                      context,
                       MaterialPageRoute(
                         builder: (context) => AdicionarAlunoView(),
-                      )
-                  );
+                      ));
                 },
                 child: Card(
                   margin: const EdgeInsets.all(22.0),
@@ -91,55 +87,56 @@ class GridLayout extends StatelessWidget {
                   child: getCardByTitle("Desempenho geral"),
                 ),
               ),
-
             ],
-
           ),
         ),
       ),
     );
   }
 
-  Widget getCardByTitle(String titulo){
+  Widget getCardByTitle(String titulo) {
     String img = "";
 
-    if(titulo == "Alunos"){
-        img = "icons/alunos.png";
+    if (titulo == "Alunos") {
+      img = "icons/alunos.png";
     }
-    if(titulo == "Criterios"){
-        img = "icons/criterios.png";
-    }if(titulo == "Avaliar"){
-        img = "icons/avaliar.png";
-    }if(titulo == "Observações"){
-        img = "icons/observacoes.png";
-    }if(titulo == "Desempenho individual"){
-        img = "icons/desempenho-individual.png";
-    }if(titulo == "Desempenho geral"){
-        img = "icons/desempenho-geral.png";
+    if (titulo == "Criterios") {
+      img = "icons/criterios.png";
     }
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          new Center(
-            child: Container(
-              child: Stack(
-                children: <Widget>[
-                  Image.asset(img, height: 60.0, width: 60.0,)
-                ],
-              ),
+    if (titulo == "Avaliar") {
+      img = "icons/avaliar.png";
+    }
+    if (titulo == "Observações") {
+      img = "icons/observacoes.png";
+    }
+    if (titulo == "Desempenho individual") {
+      img = "icons/desempenho-individual.png";
+    }
+    if (titulo == "Desempenho geral") {
+      img = "icons/desempenho-geral.png";
+    }
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        new Center(
+          child: Container(
+            child: Stack(
+              children: <Widget>[
+                Image.asset(
+                  img,
+                  height: 60.0,
+                  width: 60.0,
+                )
+              ],
             ),
           ),
-          Text(
-            titulo,
-            style: TextStyle(
-              fontSize: 16.0,
-              fontWeight: FontWeight.bold
-            ),
-            textAlign: TextAlign.center,
-          )
-        ],
-      );
-    }
-
+        ),
+        Text(
+          titulo,
+          style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+          textAlign: TextAlign.center,
+        )
+      ],
+    );
+  }
 }
-

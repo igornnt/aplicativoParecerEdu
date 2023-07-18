@@ -14,6 +14,18 @@ class EvaluationCard extends StatefulWidget {
 }
 
 class _EvaluationCardState extends State<EvaluationCard> {
+  bool isAvaliado = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Verifica se o critério está avaliado
+    setState(() {
+      isAvaliado = widget.criterio.isAvaliado == 1;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -32,10 +44,11 @@ class _EvaluationCardState extends State<EvaluationCard> {
                     // return object of type Dialog
                     return AlertDialog(
                       title: new Text("Ops"),
-                      content: new Text("Você precisa ter pelo menos 1 aluno cadastrado para poder avaliar este item."),
+                      content: new Text(
+                          "Você precisa ter pelo menos 1 aluno cadastrado para poder avaliar este item."),
                       actions: <Widget>[
                         // usually buttons at the bottom of the dialog
-                        new FlatButton(
+                        new TextButton(
                           child: new Text("Entendi"),
                           onPressed: () {
                             Navigator.of(context).pop();

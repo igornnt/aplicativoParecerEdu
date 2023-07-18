@@ -31,7 +31,6 @@ class _EditPersonState extends State<SchoolPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.edit ? "Editar Escola" : "Adicionar uma Escola"),
@@ -63,13 +62,15 @@ class _EditPersonState extends State<SchoolPage> {
                   ),
                   Padding(
                     padding: EdgeInsets.all(8.0),
-                      child: Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
-                        RaisedButton(
-                          color: Colors.red,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.red,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                          ),
                           onPressed: () {
                             Navigator.pop(context);
                           },
@@ -78,26 +79,34 @@ class _EditPersonState extends State<SchoolPage> {
                             style: TextStyle(color: Colors.white),
                           ),
                         ),
-                        RaisedButton(
-                          color: Colors.blue,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.blue,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                          ),
                           child: Text(
                             "         Salvar         ",
                             style: TextStyle(color: Colors.white),
                           ),
                           onPressed: () async {
                             if (!_formKey.currentState.validate()) {
-                              Scaffold.of(context).showSnackBar(
-                                  SnackBar(content: Text('Processando os dados')));
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: Text('Processando os dados')));
                             } else if (widget.edit == true) {
                               SchoolDatabaseProvider.db.updateSchool(new School(
                                   name: nameEditingController.text,
                                   id: widget.school.id));
+                              setState(() {});
+
                               Navigator.pop(context);
                             } else {
-                              await SchoolDatabaseProvider.db.addSchoolToDatabase(
-                                  new School(name: nameEditingController.text));
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      backgroundColor: Colors.green,
+                                      content: Text(
+                                          'Escola adicionada com sucesso')));
                               Navigator.pop(context);
                             }
                           },
@@ -134,5 +143,11 @@ class _EditPersonState extends State<SchoolPage> {
                 OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
       ),
     );
+  }
+
+  void showSnackBar1() {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        backgroundColor: Colors.green,
+        content: Text('Escola adicionada com sucesso')));
   }
 }

@@ -1,5 +1,4 @@
 class Evaluation {
-
   int id;
   int idArea;
   int idCriterio;
@@ -8,7 +7,14 @@ class Evaluation {
   int idAluno;
   double peso;
 
-  Evaluation({this.id, this.idArea, this.idCriterio,this.criterio,this.idAluno, this.peso, this.idClassSchool});
+  Evaluation(
+      {this.id,
+      this.idArea,
+      this.idCriterio,
+      this.criterio,
+      this.idAluno,
+      this.peso,
+      this.idClassSchool});
 
   factory Evaluation.fromMap(Map<String, dynamic> json) => new Evaluation(
       id: json['id'],

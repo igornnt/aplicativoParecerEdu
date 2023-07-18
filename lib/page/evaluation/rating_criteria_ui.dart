@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'card_evaluation.dart';
 
 class RatingCriteriaPage extends StatefulWidget {
-  
   String title;
   int codArea;
   ClassSchool classSchool;
@@ -15,7 +14,7 @@ class RatingCriteriaPage extends StatefulWidget {
 
   @override
   _RatingCriteriaPageState createState() =>
-   _RatingCriteriaPageState(this.title, this.classSchool, this.codArea);
+      _RatingCriteriaPageState(this.title, this.classSchool, this.codArea);
 }
 
 class _RatingCriteriaPageState extends State<RatingCriteriaPage> {
@@ -32,25 +31,28 @@ class _RatingCriteriaPageState extends State<RatingCriteriaPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-        centerTitle: true,
-        elevation: 0,
-      ),
-      body: FutureBuilder(
-        future: KnowledgeProvider.db
-            .getAllCriteriosClassSchool(codArea, classSchool.id)
-            .timeout(Duration(seconds: 1)),
-        builder:
-            (BuildContext context, AsyncSnapshot<List<Knowledge>> snapshot) {
-          return ListView.builder(
-            itemCount: (snapshot.data != null) ? snapshot.data.length : 0,
-            itemBuilder: (context, index) {
-              return EvaluationCard(snapshot.data[index],this.codArea);
-            },
-          );
-        },
-      )
-    );
+        appBar: AppBar(
+          title: Text(title),
+          centerTitle: true,
+          elevation: 0,
+        ),
+        body: FutureBuilder(
+          future: KnowledgeProvider.db
+              .getAllCriteriosClassSchool(codArea, classSchool.id)
+              .timeout(Duration(seconds: 1)),
+          builder:
+              (BuildContext context, AsyncSnapshot<List<Knowledge>> snapshot) {
+            if (snapshot.data.length <= 0) {
+              return Center(child: Text('Nenhum item cadastrado'));
+            }
+
+            return ListView.builder(
+              itemCount: (snapshot.data != null) ? snapshot.data.length : 0,
+              itemBuilder: (context, index) {
+                return EvaluationCard(snapshot.data[index], this.codArea);
+              },
+            );
+          },
+        ));
   }
 }

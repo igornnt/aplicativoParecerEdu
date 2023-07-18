@@ -1,5 +1,5 @@
-import 'package:parecer_app/models/escola_model.dart';
-import 'package:parecer_app/repositories/escolas_data_repository.dart';
+import 'package:aplicativoescolas/models/escola_model.dart';
+import 'package:aplicativoescolas/repositories/escolas_data_repository.dart';
 
 abstract class EscolasListViewContract {
   void onLoadEscolasComplete(List<Escola> items);
@@ -19,7 +19,8 @@ class EscolasListPresenter {
   }
 
   void carregaEscolas() {
-    this._repository
+    this
+        ._repository
         .buscaTodas()
         .then((dados) => this._view.onLoadEscolasComplete(dados))
         .catchError((onError) => this._view.onLoadEscolasError());

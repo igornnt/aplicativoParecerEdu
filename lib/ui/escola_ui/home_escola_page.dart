@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:parecer_app/models/escola_model.dart';
-import 'package:parecer_app/presenters/escola_presenter.dart';
-import 'package:parecer_app/ui/escola_ui/cadastrar_escola_page.dart';
-import 'package:parecer_app/ui/escola_ui/escola_card_page.dart';
+import 'package:aplicativoescolas/models/escola_model.dart';
+import 'package:aplicativoescolas/presenters/escola_presenter.dart';
+import 'package:aplicativoescolas/ui/escola_ui/cadastrar_escola_page.dart';
+import 'package:aplicativoescolas/ui/escola_ui/escola_card_page.dart';
 import 'package:toast/toast.dart';
 
 class HomeInicial extends StatefulWidget {
@@ -12,7 +12,8 @@ class HomeInicial extends StatefulWidget {
   _HomeInicialState createState() => _HomeInicialState();
 }
 
-class _HomeInicialState extends State<HomeInicial> implements EscolasListViewContract {
+class _HomeInicialState extends State<HomeInicial>
+    implements EscolasListViewContract {
   EscolasListPresenter _presenter;
   List<Escola> _escolas;
   bool _isLoading;
@@ -30,7 +31,6 @@ class _HomeInicialState extends State<HomeInicial> implements EscolasListViewCon
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text("ParecerEdu"),
@@ -52,19 +52,18 @@ class _HomeInicialState extends State<HomeInicial> implements EscolasListViewCon
                       color: Colors.grey.shade300,
                       icon: Icons.edit,
                       closeOnTap: false,
-                      onTap: (){
-                        Navigator.push(context,
+                      onTap: () {
+                        Navigator.push(
+                            context,
                             MaterialPageRoute(
-                              builder: (context) => CadastrarEscolaView(editar: true,
+                              builder: (context) => CadastrarEscolaView(
+                                  editar: true,
                                   textoParaAtualizar: this._escolas[index].nome,
-                                  id: _escolas[index].id
-                              ),
-                            )
-                        );
+                                  id: _escolas[index].id),
+                            ));
                         Toast.show('Editado $index', context,
-                          duration: Toast.LENGTH_SHORT,
-                          gravity: Toast.BOTTOM
-                        );
+                            duration: Toast.LENGTH_SHORT,
+                            gravity: Toast.BOTTOM);
                       },
                     ),
                   ),
@@ -75,31 +74,30 @@ class _HomeInicialState extends State<HomeInicial> implements EscolasListViewCon
                       color: Colors.red,
                       icon: Icons.delete,
                       closeOnTap: true,
-                      onTap: (){
+                      onTap: () {
                         setState(() {
                           _presenter.removeEscola(_escolas[index].id);
                           _presenter.carregaEscolas();
                         });
                         Toast.show('Deletado ', context,
                             duration: Toast.LENGTH_SHORT,
-                            gravity: Toast.BOTTOM
-                        );
+                            gravity: Toast.BOTTOM);
                       },
                     ),
                   )
                 ],
-                child: CardEscolaView(_escolas[index].nome,_escolas[index].id)
-            ),
+                child:
+                    CardEscolaView(_escolas[index].nome, _escolas[index].id)),
           );
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          Navigator.push(context,
+        onPressed: () {
+          Navigator.push(
+              context,
               MaterialPageRoute(
                 builder: (context) => CadastrarEscolaView(),
-              )
-          );
+              ));
         },
         tooltip: "Adicione uma escola",
         child: Icon(Icons.add),
@@ -119,7 +117,4 @@ class _HomeInicialState extends State<HomeInicial> implements EscolasListViewCon
   void onLoadEscolasError() {
     // TODO: implement onLoadEscolasError
   }
-
 }
-
-

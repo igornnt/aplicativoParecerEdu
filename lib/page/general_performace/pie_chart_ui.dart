@@ -1,48 +1,52 @@
-  
 import 'package:aplicativoescolas/page/individual_performance/indicador.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class PieChartGeneral extends StatefulWidget {
-   
-   String criterio;
-   double qtdAtingiu;
-   double qtdAtingiuParcialmente;
-   double qtdNaoAtingiu;
+  String criterio;
+  double qtdAtingiu;
+  double qtdAtingiuParcialmente;
+  double qtdNaoAtingiu;
 
-  PieChartGeneral({this.qtdAtingiu, this.qtdAtingiuParcialmente, this.qtdNaoAtingiu, this.criterio});
+  PieChartGeneral(
+      {this.qtdAtingiu,
+      this.qtdAtingiuParcialmente,
+      this.qtdNaoAtingiu,
+      this.criterio});
 
   @override
-  State<StatefulWidget> createState() => PieChartGeneralState(qtdAtingiu: this.qtdAtingiu,
-   qtdAtingiuParcialmente: this.qtdAtingiuParcialmente,
-   qtdNaoAtingiu: this.qtdNaoAtingiu,
-   criterio: criterio
-   );
+  State<StatefulWidget> createState() => PieChartGeneralState(
+      qtdAtingiu: this.qtdAtingiu,
+      qtdAtingiuParcialmente: this.qtdAtingiuParcialmente,
+      qtdNaoAtingiu: this.qtdNaoAtingiu,
+      criterio: criterio);
 }
 
 class PieChartGeneralState extends State<PieChartGeneral> {
- 
   int touchedIndex;
   String criterio;
   double qtdAtingiu;
-   double qtdAtingiuParcialmente;
-   double qtdNaoAtingiu;
+  double qtdAtingiuParcialmente;
+  double qtdNaoAtingiu;
 
-  PieChartGeneralState({this.qtdAtingiu, this.qtdAtingiuParcialmente, this.qtdNaoAtingiu, this.criterio});
+  PieChartGeneralState(
+      {this.qtdAtingiu,
+      this.qtdAtingiuParcialmente,
+      this.qtdNaoAtingiu,
+      this.criterio});
 
   @override
   Widget build(BuildContext context) {
-
     return Column(
       children: <Widget>[
         Container(
-          color: Colors.white,
-          width: MediaQuery.of(context).size.width,
-          child:  Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Center(child: Text(criterio)),
-          )),
-        SizedBox(height: 0),  
+            color: Colors.white,
+            width: MediaQuery.of(context).size.width,
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Center(child: Text(criterio)),
+            )),
+        SizedBox(height: 0),
         AspectRatio(
           aspectRatio: 1.3,
           child: Card(
@@ -57,13 +61,16 @@ class PieChartGeneralState extends State<PieChartGeneral> {
                     aspectRatio: 1,
                     child: PieChart(
                       PieChartData(
-                          pieTouchData: PieTouchData(touchCallback: (pieTouchResponse) {
+                          pieTouchData:
+                              PieTouchData(touchCallback: (pieTouchResponse) {
                             setState(() {
-                              if (pieTouchResponse.touchInput is FlLongPressEnd ||
+                              if (pieTouchResponse.touchInput
+                                      is FlLongPressEnd ||
                                   pieTouchResponse.touchInput is FlPanEnd) {
                                 touchedIndex = -1;
                               } else {
-                                touchedIndex = pieTouchResponse.touchedSectionIndex;
+                                touchedIndex =
+                                    pieTouchResponse.touchedSectionIndex;
                               }
                             });
                           }),
@@ -81,6 +88,11 @@ class PieChartGeneralState extends State<PieChartGeneral> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: const <Widget>[
+                    ElevatedButton(
+                        child: Icon(
+                      Icons.save_alt,
+                      size: 30,
+                    )),
                     Indicator(
                       color: Color(0xff0293ee),
                       text: 'Atingiu',
@@ -93,7 +105,6 @@ class PieChartGeneralState extends State<PieChartGeneral> {
                       color: Color(0xfff8b250),
                       text: 'Atingiu Parcialmente',
                       isSquare: true,
-
                     ),
                     SizedBox(
                       height: 4,
@@ -120,7 +131,6 @@ class PieChartGeneralState extends State<PieChartGeneral> {
   }
 
   List<PieChartSectionData> showingSections() {
-
     return List.generate(3, (i) {
       final isTouched = i == touchedIndex;
       final double fontSize = isTouched ? 20 : 10;
@@ -135,7 +145,9 @@ class PieChartGeneralState extends State<PieChartGeneral> {
             title: '$qtdAtingiu%',
             radius: radius,
             titleStyle: TextStyle(
-                fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
+                fontSize: fontSize,
+                fontWeight: FontWeight.bold,
+                color: const Color(0xffffffff)),
           );
         case 1:
           return PieChartSectionData(
@@ -144,7 +156,9 @@ class PieChartGeneralState extends State<PieChartGeneral> {
             title: '$qtdAtingiuParcialmente%',
             radius: radius,
             titleStyle: TextStyle(
-                fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
+                fontSize: fontSize,
+                fontWeight: FontWeight.bold,
+                color: const Color(0xffffffff)),
           );
         case 2:
           return PieChartSectionData(
@@ -153,7 +167,9 @@ class PieChartGeneralState extends State<PieChartGeneral> {
             title: '$qtdNaoAtingiu%',
             radius: radius,
             titleStyle: TextStyle(
-                fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
+                fontSize: fontSize,
+                fontWeight: FontWeight.bold,
+                color: const Color(0xffffffff)),
           );
         default:
           return null;

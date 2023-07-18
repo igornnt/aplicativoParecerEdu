@@ -1,3 +1,4 @@
+import 'package:aplicativoescolas/database/school_provider.dart';
 import 'package:aplicativoescolas/database/student_provider.dart';
 import 'package:aplicativoescolas/model/class_school.dart';
 import 'package:aplicativoescolas/model/student.dart';
@@ -11,8 +12,8 @@ class StudentsPage extends StatefulWidget {
 }
 
 class _AdicionarAlunoViewState extends State<StudentsPage> {
-
-  TextEditingController _alunoTextEditingController = new TextEditingController();
+  TextEditingController _alunoTextEditingController =
+      new TextEditingController();
 
   @override
   void initState() {
@@ -23,71 +24,147 @@ class _AdicionarAlunoViewState extends State<StudentsPage> {
 
   @override
   Widget build(BuildContext context) {
-
     idClass = ModalRoute.of(context).settings.arguments;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Alunos"),
+        title: Text("Alunos", style: TextStyle(fontWeight: FontWeight.w400)),
         elevation: 0.2,
       ),
       body: FutureBuilder(
         future: StudentProvider.db.getAllStudentsClass(idClass.id),
         builder: (BuildContext context, AsyncSnapshot<List<Student>> snapshot) {
+          // INICIA AQUI
+          if (snapshot.data.length <= 0) {
+            return Center(child: Text('Nenhum item cadastrado'));
+          }
+
           return ListView.builder(
             itemCount: snapshot.data != null ? snapshot.data.length : 0,
             itemBuilder: (context, index) {
-              return Container(
-                child: Slidable(
-                    key: ValueKey(index),
-                    actionPane: SlidableDrawerActionPane(),
-                    secondaryActions: <Widget>[
-                      Container(
-                        height: 100,
-                        child: IconSlideAction(
-                          caption: 'Editar',
-                          color: Colors.grey.shade300,
-                          icon: Icons.edit,
-                          closeOnTap: true,
-                          onTap: () {
-                            _alunoTextEditingController.text = "";
-                            _alunoTextEditingController.text =
-                                snapshot.data[index].name;
-                            show(limpar: false, index: snapshot.data[index].id);
-                          },
-                        ),
-                      ),
-                      Container(
-                        height: 100,
-                        child: IconSlideAction(
-                          caption: 'Deletar',
-                          color: Colors.red,
-                          icon: Icons.delete,
-                          closeOnTap: true,
-                          onTap: () {
-                            Toast.show('removido com sucesso', context,
-                                duration: Toast.LENGTH_SHORT,
-                                gravity: Toast.BOTTOM);
-                            setState(() {
-                              StudentProvider.db
-                                  .deleteStudentWithId(snapshot.data[index].id);
-                            });
-                          },
-                        ),
-                      )
-                    ],
-                    child: Container(
-                      decoration: BoxDecoration(
-                          border: new BorderDirectional(
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border(
                         bottom: BorderSide(
-                          color: Colors.blue.shade100,
+                          color: Colors.transparent,
                           width: 1.5,
                         ),
-                      )),
-                      child: ListTile(
-                        title: Text(snapshot.data[index].name),
                       ),
-                    )),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey[300],
+                          offset: Offset(0.0, 4.0),
+                          blurRadius: 4.0,
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Text(
+                          snapshot.data[index].name,
+                          style:
+                              (TextStyle(color: Colors.black, fontSize: 17.0)),
+                        ),
+                        SizedBox(width: 60),
+                        Column(
+                          children: [
+                            ElevatedButton(
+                              onPressed: () {
+                                _alunoTextEditingController.text = "";
+                                _alunoTextEditingController.text =
+                                    snapshot.data[index].name;
+                                show(
+                                    limpar: false,
+                                    index: snapshot.data[index].id);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.transparent,
+                                elevation: 0.0,
+                                shadowColor: Colors.transparent,
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 5, horizontal: 2),
+                              ),
+                              child: Icon(
+                                Icons.edit,
+                                color: Colors.blue,
+                                size: 24.0,
+                                semanticLabel:
+                                    'Text to announce in accessibility modes',
+                              ),
+                            ),
+                            ElevatedButton(
+                                onPressed: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                              title:
+                                                  Text("Excluir este aluno(a)"),
+                                              content: Text(
+                                                  "Você tem certeza disso?"),
+                                              actions: [
+                                                TextButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                    style: TextButton.styleFrom(
+                                                        foregroundColor:
+                                                            Colors.blue),
+                                                    child: Text("Cancelar")),
+                                                TextButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(SnackBar(
+                                                              backgroundColor:
+                                                                  Colors.red,
+                                                              content: Text(
+                                                                  'Aluno(a) excluído(a) com sucesso')));
+                                                      setState(() {
+                                                        print(snapshot
+                                                            .data[index].id);
+
+                                                        StudentProvider.db
+                                                            .deleteStudentWithId(
+                                                                snapshot
+                                                                    .data[index]
+                                                                    .id);
+                                                      });
+                                                    },
+                                                    style: TextButton.styleFrom(
+                                                        foregroundColor:
+                                                            Colors.red),
+                                                    child: Text("Sim")),
+                                              ]));
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors.transparent,
+                                  elevation: 0.0,
+                                  shadowColor: Colors.transparent,
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 2),
+                                ),
+                                child: Icon(
+                                  Icons.delete,
+                                  color: Colors.red[600],
+                                  size: 24.0,
+                                  semanticLabel:
+                                      'Text to announce in accessibility modes',
+                                )),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               );
             },
           );
@@ -116,22 +193,27 @@ class _AdicionarAlunoViewState extends State<StudentsPage> {
                 controller: _alunoTextEditingController,
               ),
               actions: <Widget>[
-                FlatButton(
+                TextButton(
                   child: Text("Cancelar"),
                   onPressed: () => Navigator.pop(context),
                 ),
-                FlatButton(
+                TextButton(
                     child: Text("Salvar"),
                     onPressed: () {
-                      if(_alunoTextEditingController.text != "" || null){
-                                             Student student =
-                          Student(name: _alunoTextEditingController.text,
-                          idClass: idClass.id);
-                      StudentProvider.db.addStudentToDatabase(student);
-                      setState(() {
-                        Navigator.pop(context);
-                        _alunoTextEditingController.text = "";
-                      }); 
+                      if (_alunoTextEditingController.text != "" || null) {
+                        Student student = Student(
+                            name: _alunoTextEditingController.text,
+                            idClass: idClass.id);
+                        StudentProvider.db.addStudentToDatabase(student);
+
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            backgroundColor: Colors.green,
+                            content:
+                                Text('Aluno(a) adicionado(a) com sucesso')));
+                        setState(() {
+                          Navigator.pop(context);
+                          _alunoTextEditingController.text = "";
+                        });
                       }
                     })
               ],
@@ -143,26 +225,31 @@ class _AdicionarAlunoViewState extends State<StudentsPage> {
           context: context,
           builder: (context) {
             return AlertDialog(
-              title: Text("Adicionar Aluno"),
+              title: Text("Editar Aluno(a)"),
               content: TextField(
                 decoration:
-                    InputDecoration(labelText: ("Informe o nome do aluno")),
+                    InputDecoration(labelText: ("Edite o nome do aluno(a)")),
                 controller: _alunoTextEditingController,
               ),
               actions: <Widget>[
-                FlatButton(
+                TextButton(
                   child: Text("Cancelar"),
                   onPressed: () => Navigator.pop(context),
                 ),
-                FlatButton(
+                TextButton(
                     child: Text("Salvar"),
                     onPressed: () {
-                      if (limpar == false ) {
+                      if (limpar == false) {
                         Student student = Student();
                         student.name = _alunoTextEditingController.text;
                         student.id = index;
                         student.idClass = idClass.id;
                         StudentProvider.db.updateStudents(student);
+
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            backgroundColor: Colors.blue,
+                            content: Text('Aluno(a) editado(a) com sucesso')));
+
                         setState(() {
                           Navigator.pop(context);
                         });

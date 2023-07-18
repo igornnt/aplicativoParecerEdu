@@ -1,34 +1,49 @@
+import 'dart:typed_data';
 import 'package:aplicativoescolas/database/evaluation_provider.dart';
 import 'package:aplicativoescolas/database/knowledge_provider.dart';
 import 'package:aplicativoescolas/model/evaluation.dart';
 import 'package:aplicativoescolas/model/knowledge.dart';
 import 'package:aplicativoescolas/model/student.dart';
-import 'package:fl_chart/fl_chart.dart';
+import 'package:syncfusion_flutter_pdf/pdf.dart';
+import 'package:aplicativoescolas/utils/pdf.dart';
 import 'package:flutter/material.dart';
 import 'package:aplicativoescolas/page/individual_performance/indicador.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'dart:io';
+import 'dart:typed_data';
 
+import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
+
+/// Chart import.
+import 'package:syncfusion_flutter_charts/charts.dart';
+
+/// Pdf import.
+import 'package:syncfusion_flutter_pdf/pdf.dart';
+
+import '../../model/class_school.dart';
+import '../pdf/pdf_ui.dart';
 import 'general_indicador.dart';
 import 'indicador_criterio_page.dart';
 
 class StudentChartPage extends StatefulWidget {
   Student student;
+  String classSchool;
 
-  StudentChartPage(this.student);
+  StudentChartPage(this.student, this.classSchool);
 
   @override
-  _StudentChartPageState createState() => _StudentChartPageState(this.student);
+  _StudentChartPageState createState() =>
+      _StudentChartPageState(this.student, this.classSchool);
 }
 
 class _StudentChartPageState extends State<StudentChartPage> {
-
-    List<Color> gradientColors = [
-    const Color(0xff23b6e6),
-    const Color(0xff02d39a),
-  ];
-
   Student student;
+  String classSchool;
 
-  _StudentChartPageState(this.student);
+  _StudentChartPageState(this.student, this.classSchool);
 
   List<Evaluation> evaluations;
 
@@ -73,7 +88,7 @@ class _StudentChartPageState extends State<StudentChartPage> {
                                   fontSize: 30,
                                   color: Colors.black87,
                                   fontWeight: FontWeight.w500)),
-                        )
+                        ),
                       ],
                     ),
                   ),
@@ -81,9 +96,9 @@ class _StudentChartPageState extends State<StudentChartPage> {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: LineChartSample2(this.student.id),
+                child: LineChartSample2(
+                    this.student.id, this.classSchool, this.student.name),
               ),
-
               Padding(
                 padding: EdgeInsets.all(14.0),
                 child: Text(
@@ -102,7 +117,6 @@ class _StudentChartPageState extends State<StudentChartPage> {
                                   titulo: linguagens,
                                 )));
                   },
-                  splashColor: Colors.blue,
                   child: areaGrafico(linguagens)),
               InkWell(
                 onTap: () {
@@ -115,7 +129,6 @@ class _StudentChartPageState extends State<StudentChartPage> {
                                 titulo: cienciasHumanas,
                               )));
                 },
-                splashColor: Colors.blue,
                 child: areaGrafico(cienciasHumanas),
               ),
               InkWell(
@@ -129,7 +142,6 @@ class _StudentChartPageState extends State<StudentChartPage> {
                                 titulo: cienciasDaNatureza,
                               )));
                 },
-                splashColor: Colors.blue,
                 child: areaGrafico(cienciasDaNatureza),
               ),
               InkWell(
@@ -143,7 +155,6 @@ class _StudentChartPageState extends State<StudentChartPage> {
                                 titulo: matematica,
                               )));
                 },
-                splashColor: Colors.blue,
                 child: areaGrafico(matematica),
               ),
               InkWell(
@@ -157,7 +168,6 @@ class _StudentChartPageState extends State<StudentChartPage> {
                                 titulo: ensinoReligioso,
                               )));
                 },
-                splashColor: Colors.blue,
                 child: areaGrafico(ensinoReligioso),
               ),
               InkWell(
@@ -182,7 +192,6 @@ class _StudentChartPageState extends State<StudentChartPage> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(6.0),
-          border: Border.all(color: gradientColors[0], width: 1),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -191,17 +200,9 @@ class _StudentChartPageState extends State<StudentChartPage> {
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 base,
-                style: TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.w300
-                ),
+                style: TextStyle(fontSize: 17, fontWeight: FontWeight.w300),
               ),
             ),
-            Icon(
-              Icons.chevron_right,
-              color: gradientColors[1],
-              size: 30,
-            )
           ],
         ),
       ),

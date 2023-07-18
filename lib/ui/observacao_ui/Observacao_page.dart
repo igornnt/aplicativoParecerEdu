@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
 
 class ObservacaoView extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Observação"),centerTitle: true,),
+      appBar: AppBar(
+        title: Text("Observação"),
+        centerTitle: true,
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
             Container(
               padding: EdgeInsets.all(20),
-              child: Text("Aluno",style: TextStyle(fontSize: 16),),
+              child: Text(
+                "Aluno",
+                style: TextStyle(fontSize: 16),
+              ),
             ),
             Container(
               child: Padding(
@@ -40,24 +45,24 @@ class ObservacaoView extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
-                  FlatButton(
-                    padding: EdgeInsets.only(left: 30,right: 30),
-                    child: Text("Cancelar", style: TextStyle(color: Colors.white)),
+                  TextButton(
+                    padding: EdgeInsets.only(left: 30, right: 30),
+                    child:
+                        Text("Cancelar", style: TextStyle(color: Colors.white)),
                     color: Colors.red.shade700,
-                    onPressed: (){},
+                    onPressed: () {},
                   ),
-                  FlatButton(
-                    padding: EdgeInsets.only(left: 70,right: 70),
+                  TextButton(
+                    padding: EdgeInsets.only(left: 70, right: 70),
                     color: Colors.green,
-                    onPressed: (){},
+                    onPressed: () {},
                     child: Container(
-                        child: Text("Salvar", style: TextStyle(color: Colors.white))
-                    ),
+                        child: Text("Salvar",
+                            style: TextStyle(color: Colors.white))),
                   )
                 ],
               ),
             ),
-
           ],
         ),
       ),

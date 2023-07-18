@@ -1,25 +1,23 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_circular_chart/flutter_circular_chart.dart';
-import 'package:parecer_app/models/avaliacao_model.dart';
-import 'package:parecer_app/models/processa_avaliacao_service.dart';
-import 'package:parecer_app/repositories/aluno_data_repository.dart';
-import 'package:parecer_app/repositories/alunos_data_repository.dart';
-import 'package:parecer_app/repositories/avaliacoes_data_repository.dart';
+import 'package:aplicativoescolas/models/avaliacao_model.dart';
+import 'package:aplicativoescolas/models/processa_avaliacao_service.dart';
+import 'package:aplicativoescolas/repositories/aluno_data_repository.dart';
+import 'package:aplicativoescolas/repositories/alunos_data_repository.dart';
+import 'package:aplicativoescolas/repositories/avaliacoes_data_repository.dart';
 
 class DesempenhoGeral extends StatefulWidget {
-
   String escolaId;
   String turmaId;
 
-  DesempenhoGeral(this.escolaId,this.turmaId);
+  DesempenhoGeral(this.escolaId, this.turmaId);
 
   @override
-  _DesempenhoGeralState createState() => _DesempenhoGeralState(escolaId,turmaId);
+  _DesempenhoGeralState createState() =>
+      _DesempenhoGeralState(escolaId, turmaId);
 }
 
 class _DesempenhoGeralState extends State<DesempenhoGeral> {
-
   String escolaId;
   String turmaId;
   double atingiu = 0;
@@ -28,9 +26,10 @@ class _DesempenhoGeralState extends State<DesempenhoGeral> {
   AlunosDataRepository repositoryAlunos;
   // = List<CircularStackEntry>();
 
-  final GlobalKey<AnimatedCircularChartState> _chartKey = new  GlobalKey<AnimatedCircularChartState>();
+  final GlobalKey<AnimatedCircularChartState> _chartKey =
+      new GlobalKey<AnimatedCircularChartState>();
 
-  _DesempenhoGeralState(this.escolaId, this.turmaId){
+  _DesempenhoGeralState(this.escolaId, this.turmaId) {
     repositoryAlunos = AlunosDataRepository(this.escolaId, this.turmaId);
     realizaAvaliacaoGeral();
   }
@@ -40,14 +39,12 @@ class _DesempenhoGeralState extends State<DesempenhoGeral> {
     // TODO: implement initState
   }
 
-    List<CircularStackEntry> data = <CircularStackEntry>[
-      CircularStackEntry(
-        <CircularSegmentEntry>[
-        ],
-        rankKey: 'Partes',
-      )
-    ];
-
+  List<CircularStackEntry> data = <CircularStackEntry>[
+    CircularStackEntry(
+      <CircularSegmentEntry>[],
+      rankKey: 'Partes',
+    )
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +73,7 @@ class _DesempenhoGeralState extends State<DesempenhoGeral> {
                         height: 8,
                         width: 8,
                       ),
-                      Text(atingiu.toString()+"% Atingiu"),
+                      Text(atingiu.toString() + "% Atingiu"),
                     ],
                   ),
                   Row(
@@ -90,7 +87,8 @@ class _DesempenhoGeralState extends State<DesempenhoGeral> {
                         height: 8,
                         width: 8,
                       ),
-                      Text(atingiuParcialmente.toString()+"% Atingiu parcialmente"),
+                      Text(atingiuParcialmente.toString() +
+                          "% Atingiu parcialmente"),
                     ],
                   ),
                   Row(
@@ -104,7 +102,7 @@ class _DesempenhoGeralState extends State<DesempenhoGeral> {
                         height: 8,
                         width: 8,
                       ),
-                      Text(naoAtingiu.toString()+"% Não atingiu"),
+                      Text(naoAtingiu.toString() + "% Não atingiu"),
                     ],
                   ),
                 ],
@@ -112,12 +110,11 @@ class _DesempenhoGeralState extends State<DesempenhoGeral> {
             ),
             AnimatedCircularChart(
               key: _chartKey,
-              size: const Size(400,400),
+              size: const Size(400, 400),
               initialChartData: data,
               chartType: CircularChartType.Pie,
               percentageValues: true,
               duration: Duration(seconds: 0),
-
             ),
           ],
         ),
@@ -128,34 +125,44 @@ class _DesempenhoGeralState extends State<DesempenhoGeral> {
   void realizaAvaliacaoGeral() async {
     List<Avaliacao> todasAvaliacoes = List<Avaliacao>();
     AvaliacoesDataRepository avaliecoesDataRepository;
-    repositoryAlunos.buscaTodas().then((alunos){
+    repositoryAlunos.buscaTodas().then((alunos) {
       alunos.forEach((aluno) => {
-        avaliecoesDataRepository = AvaliacoesDataRepository(this.escolaId, this.turmaId, aluno.id),
-        avaliecoesDataRepository.buscaTodas().then((avaliacoes) => {
-          avaliacoes.forEach((avaliacao) => {
-            todasAvaliacoes.add(avaliacao)
-          }),
-          setState((){
-            ProcessadorDeAvaliacoes processadorDeAvaliacoes = new ProcessadorDeAvaliacoes(todasAvaliacoes);
-            this.atingiu = num.parse(processadorDeAvaliacoes.processaAvaliacaoGeralParaAtingiu().toStringAsFixed(2));
-            this.atingiuParcialmente = num.parse(processadorDeAvaliacoes.processaAvaliacaoGeralParaParcial().toStringAsFixed(2));
-            this.naoAtingiu = num.parse(processadorDeAvaliacoes.processaAvaliacaoGeralParaNaoAtingiu().toStringAsFixed(2));
+            avaliecoesDataRepository =
+                AvaliacoesDataRepository(this.escolaId, this.turmaId, aluno.id),
+            avaliecoesDataRepository.buscaTodas().then((avaliacoes) => {
+                  avaliacoes
+                      .forEach((avaliacao) => {todasAvaliacoes.add(avaliacao)}),
+                  setState(() {
+                    ProcessadorDeAvaliacoes processadorDeAvaliacoes =
+                        new ProcessadorDeAvaliacoes(todasAvaliacoes);
+                    this.atingiu = num.parse(processadorDeAvaliacoes
+                        .processaAvaliacaoGeralParaAtingiu()
+                        .toStringAsFixed(2));
+                    this.atingiuParcialmente = num.parse(processadorDeAvaliacoes
+                        .processaAvaliacaoGeralParaParcial()
+                        .toStringAsFixed(2));
+                    this.naoAtingiu = num.parse(processadorDeAvaliacoes
+                        .processaAvaliacaoGeralParaNaoAtingiu()
+                        .toStringAsFixed(2));
 
-            List<CircularStackEntry> nextData = <CircularStackEntry>[
-              CircularStackEntry(
-                <CircularSegmentEntry>[
-                  new CircularSegmentEntry(atingiu , Colors.blue, rankKey: 'Q1'),
-                  new CircularSegmentEntry(atingiuParcialmente, Colors.pink, rankKey: 'Q2'),
-                  new CircularSegmentEntry(naoAtingiu, Colors.green, rankKey: 'Q3'),
-                ],
-                rankKey: 'Nova data',
-              )
-            ];
-            _chartKey.currentState.updateData(nextData);
-          })
-        })
-      });
+                    List<CircularStackEntry> nextData = <CircularStackEntry>[
+                      CircularStackEntry(
+                        <CircularSegmentEntry>[
+                          new CircularSegmentEntry(atingiu, Colors.blue,
+                              rankKey: 'Q1'),
+                          new CircularSegmentEntry(
+                              atingiuParcialmente, Colors.pink,
+                              rankKey: 'Q2'),
+                          new CircularSegmentEntry(naoAtingiu, Colors.green,
+                              rankKey: 'Q3'),
+                        ],
+                        rankKey: 'Nova data',
+                      )
+                    ];
+                    _chartKey.currentState.updateData(nextData);
+                  })
+                })
+          });
     });
   }
-
 }

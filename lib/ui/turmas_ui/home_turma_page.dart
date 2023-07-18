@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:parecer_app/models/turma_model.dart';
-import 'package:parecer_app/repositories/turmas_data_repository.dart';
-import 'package:parecer_app/ui/turmas_ui/cadastro_turma_page.dart';
-import 'package:parecer_app/ui/turmas_ui/card_turma_page.dart';
+import 'package:aplicativoescolas/models/turma_model.dart';
+import 'package:aplicativoescolas/repositories/turmas_data_repository.dart';
+import 'package:aplicativoescolas/ui/turmas_ui/cadastro_turma_page.dart';
+import 'package:aplicativoescolas/ui/turmas_ui/card_turma_page.dart';
 
 import 'package:toast/toast.dart';
 
 class HomeTurma extends StatefulWidget {
-
   String escolaId;
 
   HomeTurma({String escolaId}) {
@@ -61,13 +60,14 @@ class _HomeTurmaState extends State<HomeTurma> {
                       icon: Icons.edit,
                       closeOnTap: false,
                       onTap: () {
-                        Navigator.push(context,
+                        Navigator.push(
+                            context,
                             MaterialPageRoute(
                               builder: (context) => AdicionaTurma(escolaId,
-                                editar: true,
-                                nomeTurma: _turmas[index].nome, turmaId: _turmas[index].id),
-                            )
-                        );
+                                  editar: true,
+                                  nomeTurma: _turmas[index].nome,
+                                  turmaId: _turmas[index].id),
+                            ));
                       },
                     ),
                   ),
@@ -82,14 +82,17 @@ class _HomeTurmaState extends State<HomeTurma> {
                         setState(() {
                           removerTurma(_turmas[index].id);
                         });
-                        Toast.show('Turma '+ _turmas[index].nome +' deletada ', context,
+                        Toast.show(
+                            'Turma ' + _turmas[index].nome + ' deletada ',
+                            context,
                             duration: Toast.LENGTH_LONG,
                             gravity: Toast.BOTTOM);
                       },
                     ),
                   )
                 ],
-                child: TurmaView(_turmas[index].nome,_turmas[index].id, escolaId)),
+                child: TurmaView(
+                    _turmas[index].nome, _turmas[index].id, escolaId)),
           );
         },
       ),
@@ -109,22 +112,19 @@ class _HomeTurmaState extends State<HomeTurma> {
 
   void onLoadTurmasComplete() {
     this._turmasDataRepository.buscaTodas().then((dados) => {
-      this.setState(() {
-        this._turmas = dados;
-        this._isLoading = false;
-      })
-    });
+          this.setState(() {
+            this._turmas = dados;
+            this._isLoading = false;
+          })
+        });
   }
-  
-  void removerTurma(String idTurma){
-      _turmasDataRepository.remove(idTurma);
-      _turmasDataRepository.buscaTodas().then((turmas) =>{
-      setState(() {
-        this._turmas = turmas;
-      })
-      }
-      );
-  }
-  
 
+  void removerTurma(String idTurma) {
+    _turmasDataRepository.remove(idTurma);
+    _turmasDataRepository.buscaTodas().then((turmas) => {
+          setState(() {
+            this._turmas = turmas;
+          })
+        });
+  }
 }

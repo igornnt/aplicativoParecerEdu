@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:parecer_app/models/turma_model.dart';
-import 'package:parecer_app/repositories/turmas_data_repository.dart';
-import 'package:parecer_app/ui/turmas_ui/home_turma_page.dart';
+import 'package:aplicativoescolas/models/turma_model.dart';
+import 'package:aplicativoescolas/repositories/turmas_data_repository.dart';
+import 'package:aplicativoescolas/ui/turmas_ui/home_turma_page.dart';
 
 class AdicionaTurma extends StatelessWidget {
-
   String escolaId;
   String turmaId;
   bool editar;
@@ -14,21 +13,20 @@ class AdicionaTurma extends StatelessWidget {
 
   TextEditingController _textTurmaEditingController = TextEditingController();
 
-
-  AdicionaTurma(String idEscola, {String turmaId, bool editar, String nomeTurma}){
-
+  AdicionaTurma(String idEscola,
+      {String turmaId, bool editar, String nomeTurma}) {
     this.escolaId = idEscola;
 
     turmasDataRepository = TurmasDataRepository(escolaId);
 
     _textTurmaEditingController.text = "";
 
-    if(editar == true) {
+    if (editar == true) {
       this.turmaId = turmaId;
       this.editar = true;
       this.nomeTurmaAtualizar = nomeTurma;
       _textTurmaEditingController.text = nomeTurma;
-    }else{
+    } else {
       this.editar = false;
     }
   }
@@ -44,13 +42,12 @@ class AdicionaTurma extends StatelessWidget {
     );
   }
 
-  Widget campoCadastroTurma (BuildContext context){
-
+  Widget campoCadastroTurma(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.only(left: 32, bottom: 0, right: 32, top: 15 ),
+            padding: EdgeInsets.only(left: 32, bottom: 0, right: 32, top: 15),
             child: TextField(
               //Definir o tipo de teclado que será digitado
               style: TextStyle(
@@ -81,26 +78,26 @@ class AdicionaTurma extends StatelessWidget {
                 //Cor do botão
                 color: Colors.blue,
                 //O Texto que vai nele
-                child: Text("Cadastrar", style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white
-                ),),
+                child: Text(
+                  "Cadastrar",
+                  style: TextStyle(fontSize: 16, color: Colors.white),
+                ),
                 //A função que será digitada
-                onPressed: (){
-                  if(editar == false){
+                onPressed: () {
+                  if (editar == false) {
                     salvarTurma();
-                    Navigator.push(context,
+                    Navigator.push(
+                        context,
                         MaterialPageRoute(
                           builder: (context) => HomeTurma(escolaId: escolaId),
-                        )
-                    );
-                  }else{
+                        ));
+                  } else {
                     editarTurma();
-                    Navigator.push(context,
+                    Navigator.push(
+                        context,
                         MaterialPageRoute(
                           builder: (context) => HomeTurma(escolaId: escolaId),
-                        )
-                    );
+                        ));
                   }
                 },
               ),
@@ -111,19 +108,17 @@ class AdicionaTurma extends StatelessWidget {
     );
   }
 
-  void salvarTurma(){
+  void salvarTurma() {
     String texto = _textTurmaEditingController.text;
     Turma turma = Turma();
     turma.nome = texto;
     turmasDataRepository.adiciona(turma.toMap());
   }
 
-  void editarTurma(){
+  void editarTurma() {
     String nome = _textTurmaEditingController.text;
     Turma turma = Turma();
     turma.nome = nome;
     turmasDataRepository.atualiza(turma.toMap(), turmaId);
-
   }
-
 }

@@ -20,7 +20,6 @@ class MenuPage extends StatelessWidget {
 }
 
 class GridLayout extends StatelessWidget {
-
   ClassSchool classSchool;
 
   GridLayout(this.classSchool);
@@ -38,7 +37,12 @@ class GridLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(classSchool.name, style: TextStyle(fontWeight: FontWeight.w400)),
+        title: Row(
+          children: [
+            Text(classSchool.name,
+                style: TextStyle(fontWeight: FontWeight.w400)),
+          ],
+        ),
         centerTitle: true,
         backgroundColor: Colors.blue,
         elevation: 9,
@@ -134,12 +138,11 @@ class GridLayout extends StatelessWidget {
               ),
             ),
             GestureDetector(
-              onTap: (){
-                 Navigator.push(
+              onTap: () {
+                Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          GeneralChart(this.classSchool)),
+                      builder: (context) => GeneralChart(this.classSchool)),
                 );
               },
               child: Card(

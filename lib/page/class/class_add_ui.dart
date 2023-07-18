@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ClassPage extends StatefulWidget {
-
   final bool edit;
   final ClassSchool classSchool;
   final int idSchool;
@@ -12,15 +11,12 @@ class ClassPage extends StatefulWidget {
   ClassPage({this.edit, this.classSchool, this.idSchool})
       : assert(edit == true || classSchool == null);
 
-
   @override
   _ClassPageState createState() => _ClassPageState();
 }
 
 class _ClassPageState extends State<ClassPage> {
-
   TextEditingController nameEditingController = TextEditingController();
-
 
   final _formKey = GlobalKey<FormState>();
 
@@ -35,9 +31,10 @@ class _ClassPageState extends State<ClassPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      appBar: AppBar(title: Text(widget.edit?"Edite a turma" : "Adicionar uma turma"),),
+      appBar: AppBar(
+        title: Text(widget.edit ? "Edite a turma" : "Adicionar uma turma"),
+      ),
       body: Form(
           key: _formKey,
           child: Padding(
@@ -53,9 +50,12 @@ class _ClassPageState extends State<ClassPage> {
                       width: 150,
                     ),
                   ),
-                  textFormField(nameEditingController,  "Turma",
+                  textFormField(
+                      nameEditingController,
+                      "Turma",
                       "Adicione um nome para a turma",
-                      Icons.school, widget.edit ? widget.classSchool.name : "s"),
+                      Icons.school,
+                      widget.edit ? widget.classSchool.name : "s"),
                   SizedBox(
                     height: 15.0,
                     width: 30.0,
@@ -63,10 +63,12 @@ class _ClassPageState extends State<ClassPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
-                      RaisedButton(
-                        color: Colors.red,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.red,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                        ),
                         onPressed: () {
                           Navigator.pop(context);
                         },
@@ -75,34 +77,38 @@ class _ClassPageState extends State<ClassPage> {
                           style: TextStyle(color: Colors.white),
                         ),
                       ),
-                      RaisedButton(
-                        color: Colors.blue,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.blue,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                        ),
                         child: Text(
                           "         Salvar         ",
                           style: TextStyle(color: Colors.white),
                         ),
                         onPressed: () async {
+                          showSnackBar1();
                           if (!_formKey.currentState.validate()) {
-                            Scaffold.of(context).showSnackBar(
-                                SnackBar(content: Text('Processando os dados')));
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text('Processando os dados')));
                           } else if (widget.edit == true) {
                             ClassProvider.db.updateClassSchool(new ClassSchool(
                                 name: nameEditingController.text,
                                 id: widget.classSchool.id,
-                                idSchool: widget.classSchool.idSchool
-                            ));
-                            setState(() {
-                            });
+                                idSchool: widget.classSchool.idSchool));
+                            setState(() {});
                             Navigator.pop(context);
                           } else {
-                            await ClassProvider.db.addClassToDatabase(new ClassSchool(
-                                name: nameEditingController.text,
-                              idSchool: widget.idSchool
-                            ));
+                            setState(() async {
+                              await ClassProvider.db.addClassToDatabase(
+                                  new ClassSchool(
+                                      name: nameEditingController.text,
+                                      idSchool: widget.idSchool));
+                            });
+
                             setState(() {
-                              print(widget.idSchool.toString() +"osko");
+                              print(widget.idSchool.toString() + "osko");
                             });
                             Navigator.pop(context);
                           }
@@ -136,9 +142,14 @@ class _ClassPageState extends State<ClassPage> {
             hintText: hint,
             labelText: label,
             border:
-            OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
+                OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
       ),
     );
   }
 
+  void showSnackBar1() {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        backgroundColor: Colors.green,
+        content: Text('Turma adicionada com sucesso')));
+  }
 }

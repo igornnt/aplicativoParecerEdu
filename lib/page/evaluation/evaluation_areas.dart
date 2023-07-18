@@ -21,7 +21,11 @@ class Evaluation_AreasPage extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      appBar: AppBar(title: Text("Áreas do conhecimento"),),
+      appBar: AppBar(
+       title: Text("Avaliar", style: TextStyle(fontWeight: FontWeight.w400)),
+   
+        
+        ),
       body: Column(
         children: <Widget>[
           //Linguagens

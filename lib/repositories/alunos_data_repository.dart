@@ -1,11 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:parecer_app/models/aluno_model.dart';
-import 'package:parecer_app/models/avaliacao_model.dart';
+import 'package:aplicativoescolas/models/aluno_model.dart';
+import 'package:aplicativoescolas/models/avaliacao_model.dart';
 
 import 'avaliacoes_data_repository.dart';
 
 class AlunosDataRepository {
-
   final Firestore _database = Firestore.instance;
   String _caminho = 'escolas';
   String _escolaID;
@@ -14,7 +13,8 @@ class AlunosDataRepository {
   AlunosDataRepository(String escolaID, String turmaID) {
     this._escolaID = escolaID;
     this._turmaID = turmaID;
-    this._caminho = this._caminho + '/' + escolaID + '/turmas/' + turmaID + '/alunos';
+    this._caminho =
+        this._caminho + '/' + escolaID + '/turmas/' + turmaID + '/alunos';
   }
 
   Stream<List<Aluno>> buscaTodasComoStream() {
@@ -30,8 +30,8 @@ class AlunosDataRepository {
     List<DocumentSnapshot> documentos = new List<DocumentSnapshot>();
 
     await ref.getDocuments().then((dados) => {
-      dados.documents.forEach((documento) => {documentos.add(documento)})
-    });
+          dados.documents.forEach((documento) => {documentos.add(documento)})
+        });
 
     return documentos.map((alunos) => Aluno.fromFirestore(alunos)).toList();
   }
@@ -41,17 +41,16 @@ class AlunosDataRepository {
 
     AvaliacoesDataRepository avaliecoesDataRepository;
     await this.buscaTodas().then((alunos) => {
-      alunos.forEach((aluno) => {
-        avaliecoesDataRepository = AvaliacoesDataRepository(this._escolaID, this._turmaID, aluno.id),
-        avaliecoesDataRepository.buscaTodas().then((avaliacoes) => {
-          avaliacoes.forEach((avaliacao) => {
-            todasAvaliacoes.add(avaliacao)
-          }),
-
-          print(todasAvaliacoes.length)
-        })
-      })
-    });
+          alunos.forEach((aluno) => {
+                avaliecoesDataRepository = AvaliacoesDataRepository(
+                    this._escolaID, this._turmaID, aluno.id),
+                avaliecoesDataRepository.buscaTodas().then((avaliacoes) => {
+                      avaliacoes.forEach(
+                          (avaliacao) => {todasAvaliacoes.add(avaliacao)}),
+                      print(todasAvaliacoes.length)
+                    })
+              })
+        });
 
     return todasAvaliacoes;
   }
@@ -92,5 +91,4 @@ class AlunosDataRepository {
 
     return Aluno.fromFirestore(doc);
   }
-
 }

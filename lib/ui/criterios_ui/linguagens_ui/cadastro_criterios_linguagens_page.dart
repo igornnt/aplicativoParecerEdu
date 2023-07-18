@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:parecer_app/models/criterio_model.dart';
-import 'package:parecer_app/repositories/criterio_data_repository.dart';
+import 'package:aplicativoescolas/models/criterio_model.dart';
+import 'package:aplicativoescolas/repositories/criterio_data_repository.dart';
 import 'criterios_linguagens_page.dart';
 
 class CadastrarCriteriosLinguagensView extends StatelessWidget {
-
   TextEditingController _textEditingController = TextEditingController();
 
   String turmaId;
@@ -15,7 +14,8 @@ class CadastrarCriteriosLinguagensView extends StatelessWidget {
 
   CriterioDataRepository _criterioDataRepository;
 
-  CadastrarCriteriosLinguagensView(String turmaID, String escolaID,{bool editar, String id, String desc}){
+  CadastrarCriteriosLinguagensView(String turmaID, String escolaID,
+      {bool editar, String id, String desc}) {
     this.turmaId = turmaID;
     this.escolaId = escolaID;
     this._criterioDataRepository = CriterioDataRepository(turmaId, escolaId);
@@ -36,13 +36,12 @@ class CadastrarCriteriosLinguagensView extends StatelessWidget {
     );
   }
 
-  Widget _campoCadastroCriterios (BuildContext context){
-
+  Widget _campoCadastroCriterios(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.only(left: 32, bottom: 0, right: 32, top: 15 ),
+            padding: EdgeInsets.only(left: 32, bottom: 0, right: 32, top: 15),
             child: TextField(
               style: TextStyle(
                 fontSize: 17,
@@ -55,8 +54,7 @@ class CadastrarCriteriosLinguagensView extends StatelessWidget {
               maxLength: 50,
               maxLengthEnforced: false,
               obscureText: false,
-              onSubmitted: (String campoTextoEscola) {
-              },
+              onSubmitted: (String campoTextoEscola) {},
               controller: _textEditingController,
             ),
           ),
@@ -67,33 +65,32 @@ class CadastrarCriteriosLinguagensView extends StatelessWidget {
               width: MediaQuery.of(context).size.height,
               child: RaisedButton(
                 color: Colors.blue,
-                child: Text("Cadastrar", style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white
-                ),
+                child: Text(
+                  "Cadastrar",
+                  style: TextStyle(fontSize: 16, color: Colors.white),
                 ),
                 onPressed: () {
-                  if(editar == true){
+                  if (editar == true) {
                     editarCriterio(id);
-                    Navigator.push(context,
+                    Navigator.push(
+                        context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              CriterioLinguagensView(turmaID: turmaId,
-                                  escolaID: escolaId,
-                                  titulo: "Linguagens"),
-                        )
-                    );
-                  }else {
+                          builder: (context) => CriterioLinguagensView(
+                              turmaID: turmaId,
+                              escolaID: escolaId,
+                              titulo: "Linguagens"),
+                        ));
+                  } else {
                     String nome = _textEditingController.text;
                     adicionar(nome);
-                    Navigator.push(context,
+                    Navigator.push(
+                        context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              CriterioLinguagensView(turmaID: turmaId,
-                                  escolaID: escolaId,
-                                  titulo: "Linguagens"),
-                        )
-                    );
+                          builder: (context) => CriterioLinguagensView(
+                              turmaID: turmaId,
+                              escolaID: escolaId,
+                              titulo: "Linguagens"),
+                        ));
                   }
                 },
               ),
@@ -109,11 +106,10 @@ class CadastrarCriteriosLinguagensView extends StatelessWidget {
     _criterioDataRepository.adiciona(criterio.toMap());
   }
 
-  void editarCriterio(String id){
+  void editarCriterio(String id) {
     String novoTexto = _textEditingController.text;
-    Criterio criterio = Criterio(descricao: novoTexto, areaRef: "LINGUAGENS", id: id);
+    Criterio criterio =
+        Criterio(descricao: novoTexto, areaRef: "LINGUAGENS", id: id);
     _criterioDataRepository.atualiza(criterio.toMap(), id);
-
   }
-
 }

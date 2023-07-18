@@ -2,12 +2,13 @@ import 'dart:async';
 import 'dart:io';
 import 'package:aplicativoescolas/database/class_school_provider.dart';
 import 'package:aplicativoescolas/model/school.dart';
+import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:sqflite/sqflite.dart';
 
 class SchoolDatabaseProvider {
-
   SchoolDatabaseProvider._();
 
   static final SchoolDatabaseProvider db = SchoolDatabaseProvider._();
@@ -25,11 +26,11 @@ class SchoolDatabaseProvider {
     String path = join(directory.path, "school.db");
     return await openDatabase(path, version: 1,
         onCreate: (Database db, int version) async {
-          await db.execute("CREATE TABLE School ("
-              "id integer primary key AUTOINCREMENT,"
-              "name TEXT"
-              ")");
-        });
+      await db.execute("CREATE TABLE School ("
+          "id integer primary key AUTOINCREMENT,"
+          "name TEXT"
+          ")");
+    });
   }
 
   addSchoolToDatabase(School school) async {
@@ -39,6 +40,7 @@ class SchoolDatabaseProvider {
       school.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+
     return raw;
   }
 
@@ -77,5 +79,43 @@ class SchoolDatabaseProvider {
     return count;
   }
 
+  backupDB() async {
+//Verifica permissão ao usuário se pode mexer no storage do celular
+    var status = await Permission.storage.status;
+// Se não for permitido, solicita ao usuário
 
+    if (!status.isGranted) {
+      await Permission.storage.request();
+    }
+
+    try {
+      String appDocumentsDir = (await getApplicationDocumentsDirectory()).path;
+      String schoolDBPath = '$appDocumentsDir/school.db';
+
+      print("====" + schoolDBPath);
+
+      File ourDBFile = File(schoolDBPath);
+
+      await ourDBFile.copy("/storage/emulated/0/Download/app.db");
+    } catch (e) {
+      print("========================= error ${e.toString()}");
+    }
+  }
+
+  restoreDB() async {
+    var status = await Permission.storage.status;
+
+    if (!status.isGranted) {
+      await Permission.storage.request();
+    }
+
+    try {
+      File saveDBFile = File("/storage/emulated/0/Download/school.db");
+
+      await saveDBFile.copy(
+          "/data/user/0/com.example.aplicativoescolas/app_flutter/school.db");
+    } catch (e) {
+      print("========================= error ${e.toString()}");
+    }
+  }
 }

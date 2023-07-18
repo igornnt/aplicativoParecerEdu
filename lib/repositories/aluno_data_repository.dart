@@ -1,8 +1,5 @@
+import 'package:aplicativoescolas/models/aluno_model.dart';
 
-import 'package:parecer_app/models/aluno_model.dart';
-
-class AlunoDataRepository{
-
+class AlunoDataRepository {
   static List<Aluno> alunos = new List();
-
 }

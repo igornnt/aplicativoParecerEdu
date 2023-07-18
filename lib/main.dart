@@ -12,7 +12,6 @@ import 'package:flutter/material.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -24,7 +23,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => MainPage(),
         '/first-time': (context) => ScreenFirst(),
-        '/home' : (context) => HomePage(),
+        '/home': (context) => HomePage(),
         '/turma': (context) => ClassSchoolPage(),
         '/menu': (context) => MenuPage(),
         '/alunos': (context) => StudentsPage(),

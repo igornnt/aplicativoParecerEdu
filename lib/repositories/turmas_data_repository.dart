@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:parecer_app/models/turma_model.dart';
+import 'package:aplicativoescolas/models/turma_model.dart';
 
 class TurmasDataRepository {
-
   final Firestore _database = Firestore.instance;
   String _caminho = 'escolas';
 
@@ -65,5 +64,4 @@ class TurmasDataRepository {
 
     return Turma.fromFirestore(doc);
   }
-
 }

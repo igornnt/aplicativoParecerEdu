@@ -1,20 +1,20 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:parecer_app/models/aluno_model.dart';
-import 'package:parecer_app/models/avaliacao_model.dart';
-import 'package:parecer_app/models/criterio_model.dart';
-import 'package:parecer_app/repositories/alunos_data_repository.dart';
-import 'package:parecer_app/repositories/avaliacoes_data_repository.dart';
-import 'package:parecer_app/repositories/criterio_data_repository.dart';
+import 'package:aplicativoescolas/models/aluno_model.dart';
+import 'package:aplicativoescolas/models/avaliacao_model.dart';
+import 'package:aplicativoescolas/models/criterio_model.dart';
+import 'package:aplicativoescolas/repositories/alunos_data_repository.dart';
+import 'package:aplicativoescolas/repositories/avaliacoes_data_repository.dart';
+import 'package:aplicativoescolas/repositories/criterio_data_repository.dart';
 
 class AvaliacaoView extends StatefulWidget {
-
   String criterioId;
   String idEscola;
   String idTurma;
   String titulo;
 
-  AvaliacaoView(this.titulo,String criterioId, String idEscola, String idTurma){
+  AvaliacaoView(
+      this.titulo, String criterioId, String idEscola, String idTurma) {
     this.criterioId = criterioId;
     this.idEscola = idEscola;
     this.idTurma = idTurma;
@@ -22,14 +22,13 @@ class AvaliacaoView extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-
     // TODO: implement createState
-    return _AvaliacaoViewState(this.titulo, this.criterioId, this.idEscola, idTurma);
+    return _AvaliacaoViewState(
+        this.titulo, this.criterioId, this.idEscola, idTurma);
   }
 }
 
 class _AvaliacaoViewState extends State<AvaliacaoView> {
-
   String idEscola;
   String idTurma;
   String titulo;
@@ -49,7 +48,8 @@ class _AvaliacaoViewState extends State<AvaliacaoView> {
     this.onLoadAvaliacaoComplete();
   }
 
-  _AvaliacaoViewState(this.titulo,String criterio, this.idTurma, this.idEscola){
+  _AvaliacaoViewState(
+      this.titulo, String criterio, this.idTurma, this.idEscola) {
     this.criterioId = criterio;
     alunoDataRepository = AlunosDataRepository(idEscola, idTurma);
     criterioDataRepository = CriterioDataRepository(idEscola, idTurma);
@@ -91,7 +91,6 @@ class _AvaliacaoViewState extends State<AvaliacaoView> {
   }
 
   void stateBtnAtingiuParcialmente() {
-
     this.peso = 0.5;
 
     setState(() {
@@ -116,7 +115,6 @@ class _AvaliacaoViewState extends State<AvaliacaoView> {
   }
 
   void stateBtnNaoAtingiu() {
-
     this.peso = 0;
 
     setState(() {
@@ -153,7 +151,7 @@ class _AvaliacaoViewState extends State<AvaliacaoView> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            FlatButton(
+            TextButton(
               onPressed: () {
                 print("Cancelar");
               },
@@ -162,27 +160,33 @@ class _AvaliacaoViewState extends State<AvaliacaoView> {
                 style: TextStyle(fontSize: 20, color: Colors.red.shade300),
               ),
             ),
-            FlatButton(
+            TextButton(
               onPressed: () {
-                    setState(() {
-                      if(qtdAvaliados == tamanhoList-1){
-                        Navigator.pop(context);
-                      } else {
-                      avaliacoesDataRepository = AvaliacoesDataRepository(idEscola, idTurma,alunos[qtdAvaliados].id);
-                        Avaliacao novaAvaliacao;
-                        criterioDataRepository.pegaPeloReferece(criterioId).then((dadoCriterio) => {
-                          print(dadoCriterio.path),
-                          print(dadoCriterio),
-                          novaAvaliacao = Avaliacao(peso: this.peso, criterioRef: dadoCriterio),
-                          avaliacoesDataRepository.adiciona(novaAvaliacao.toMap()).then((resposta) => {
+                setState(() {
+                  if (qtdAvaliados == tamanhoList - 1) {
+                    Navigator.pop(context);
+                  } else {
+                    avaliacoesDataRepository = AvaliacoesDataRepository(
+                        idEscola, idTurma, alunos[qtdAvaliados].id);
+                    Avaliacao novaAvaliacao;
+                    criterioDataRepository
+                        .pegaPeloReferece(criterioId)
+                        .then((dadoCriterio) => {
+                              print(dadoCriterio.path),
+                              print(dadoCriterio),
+                              novaAvaliacao = Avaliacao(
+                                  peso: this.peso, criterioRef: dadoCriterio),
+                              avaliacoesDataRepository
+                                  .adiciona(novaAvaliacao.toMap())
+                                  .then((resposta) => {
 //                            print(resposta)
-                          })
-                      });
-                      qtdAvaliados++;
-                      qtdAlunos--;
-                      resetaBotao();
-                      }
-                  });
+                                      })
+                            });
+                    qtdAvaliados++;
+                    qtdAlunos--;
+                    resetaBotao();
+                  }
+                });
               },
               child: Row(
                 children: <Widget>[
@@ -204,29 +208,30 @@ class _AvaliacaoViewState extends State<AvaliacaoView> {
             child: Center(
               child: Text(
                 "$qtdAvaliados/$qtdAlunos alunos",
-                style: TextStyle(fontSize: 20,fontWeight: FontWeight.w300),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
               ),
             ),
           ),
           Padding(
             padding:
-            const EdgeInsets.only(left: 8, top: 30, right: 8, bottom: 8),
+                const EdgeInsets.only(left: 8, top: 30, right: 8, bottom: 8),
             child: Center(
                 //this.alunos[this.qtdAvaliados].nome
-                child: Text((this.alunos != null) ? this.alunos[this.qtdAvaliados].nome : "",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                )),
+                child: Text(
+              (this.alunos != null) ? this.alunos[this.qtdAvaliados].nome : "",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            )),
           ),
           Padding(
             padding:
-            const EdgeInsets.only(left: 8, top: 30, right: 8, bottom: 8),
+                const EdgeInsets.only(left: 8, top: 30, right: 8, bottom: 8),
             child: Center(
                 child: Text(
-                  this.titulo,
-                  style: TextStyle(
-                    fontSize: 15,
-                  ),
-                )),
+              this.titulo,
+              style: TextStyle(
+                fontSize: 15,
+              ),
+            )),
           ),
           Column(
             children: <Widget>[
@@ -241,7 +246,6 @@ class _AvaliacaoViewState extends State<AvaliacaoView> {
   }
 
   Widget btnAtingiu(String nome) {
-
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20, top: 30, bottom: 0),
       child: MaterialButton(
@@ -269,6 +273,7 @@ class _AvaliacaoViewState extends State<AvaliacaoView> {
       ),
     );
   }
+
   Widget btnAtingiuParcialmente(String nome) {
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20, top: 30, bottom: 0),
@@ -297,6 +302,7 @@ class _AvaliacaoViewState extends State<AvaliacaoView> {
       ),
     );
   }
+
   Widget btnNaoAtingiu(String nome) {
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20, top: 30, bottom: 0),
@@ -325,19 +331,20 @@ class _AvaliacaoViewState extends State<AvaliacaoView> {
       ),
     );
   }
+
   void onLoadAvaliacaoComplete() {
     this.alunoDataRepository.buscaTodas().then((dados) => {
-      this.setState(() {
-        this.alunos = dados;
-        qtdAlunos = alunos.length;
-        tamanhoList = alunos.length;
-      })
-    });
+          this.setState(() {
+            this.alunos = dados;
+            qtdAlunos = alunos.length;
+            tamanhoList = alunos.length;
+          })
+        });
   }
 
   void resetaBotao() {
     this.corBtnFundoAtingiu = Colors.white;
-    this. corBordaAtingiu = Colors.blue;
+    this.corBordaAtingiu = Colors.blue;
     this.corLetraTextoAtingiu = Colors.black;
 
     this.corBtnFundoAtingiuParcialmente = Colors.white;
@@ -348,5 +355,4 @@ class _AvaliacaoViewState extends State<AvaliacaoView> {
     this.corBordaNaoAtingiu = Colors.blue;
     this.corLetraTextoNaoAtingiu = Colors.black;
   }
-
 }

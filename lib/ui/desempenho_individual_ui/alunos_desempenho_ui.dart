@@ -1,11 +1,9 @@
-
 import 'package:flutter/material.dart';
-import 'package:parecer_app/models/aluno_model.dart';
-import 'package:parecer_app/repositories/alunos_data_repository.dart';
-import 'package:parecer_app/ui/desempenho_individual_ui/desempenho_individual_page.dart';
+import 'package:aplicativoescolas/models/aluno_model.dart';
+import 'package:aplicativoescolas/repositories/alunos_data_repository.dart';
+import 'package:aplicativoescolas/ui/desempenho_individual_ui/desempenho_individual_page.dart';
 
 class AlunoViewChart extends StatefulWidget {
-
   String escolaId;
   String turmaId;
 
@@ -15,7 +13,8 @@ class AlunoViewChart extends StatefulWidget {
   }
 
   @override
-  _AdicionarAlunoViewState createState() => _AdicionarAlunoViewState(escolaId, turmaId);
+  _AdicionarAlunoViewState createState() =>
+      _AdicionarAlunoViewState(escolaId, turmaId);
 }
 
 class _AdicionarAlunoViewState extends State<AlunoViewChart> {
@@ -53,18 +52,18 @@ class _AdicionarAlunoViewState extends State<AlunoViewChart> {
               itemCount: (this.alunos != null) ? this.alunos.length : 0,
               itemBuilder: (context, index) {
                 return GestureDetector(
-                  onTap:(){
-                    Navigator.push(context,
-                        MaterialPageRoute(
-                        builder: (context) => DesempenhoIndividual(this.escolaId, this.turmaId, alunos[index].id)
-                    ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => DesempenhoIndividual(
+                              this.escolaId, this.turmaId, alunos[index].id)),
                     );
                   },
                   child: Container(
-                    child:ListTile(
-                          title: Text(alunos[index].getNomeAluno()),
-                    )
-                  ),
+                      child: ListTile(
+                    title: Text(alunos[index].getNomeAluno()),
+                  )),
                 );
               },
             ),
@@ -76,9 +75,9 @@ class _AdicionarAlunoViewState extends State<AlunoViewChart> {
 
   void onLoadAlunosComplete() {
     this._alunosDataRepository.buscaTodas().then((dados) => {
-      this.setState(() {
-        this.alunos = dados;
-      })
-    });
+          this.setState(() {
+            this.alunos = dados;
+          })
+        });
   }
 }

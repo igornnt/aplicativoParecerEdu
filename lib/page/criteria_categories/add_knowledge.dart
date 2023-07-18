@@ -9,14 +9,14 @@ class AddKnowledge extends StatefulWidget {
   final int idArea;
   final int idTurma;
 
-  AddKnowledge(this.edit, {this.idTurma,this.idArea, this.knowledge}) : assert(edit == true || knowledge == null);
+  AddKnowledge(this.edit, {this.idTurma, this.idArea, this.knowledge})
+      : assert(edit == true || knowledge == null);
 
   @override
   _EditAddKnowledgeState createState() => _EditAddKnowledgeState();
 }
 
 class _EditAddKnowledgeState extends State<AddKnowledge> {
-
   TextEditingController nameEditingController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
@@ -32,7 +32,6 @@ class _EditAddKnowledgeState extends State<AddKnowledge> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.edit ? "Editar Critério" : "Adicionar critério"),
@@ -67,10 +66,12 @@ class _EditAddKnowledgeState extends State<AddKnowledge> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
-                        RaisedButton(
-                          color: Colors.red,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.red,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                          ),
                           onPressed: () {
                             Navigator.pop(context);
                           },
@@ -79,38 +80,41 @@ class _EditAddKnowledgeState extends State<AddKnowledge> {
                             style: TextStyle(color: Colors.white),
                           ),
                         ),
-                        RaisedButton(
-                          color: Colors.blue,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.blue,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                          ),
                           child: Text(
                             "         Salvar         ",
                             style: TextStyle(color: Colors.white),
                           ),
                           onPressed: () async {
+                            showSnackBar1();
                             if (!_formKey.currentState.validate()) {
-                              Scaffold.of(context).showSnackBar(
-                                  SnackBar(content: Text('Processando os dados')));
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: Text('Processando os dados')));
                             } else if (widget.edit == true) {
-                             setState(() {
-                               KnowledgeProvider.db.updateKnowledge(new Knowledge(
-                               id: widget.knowledge.id,
-                               criterio: nameEditingController.text,
-                               idArea: widget.knowledge.idArea,
-                               idTurma: widget.knowledge.idTurma,
-                               isAvaliado: widget.knowledge.isAvaliado
-                             ));
-                               Navigator.pop(context);
-                             });
-                            
+                              setState(() {
+                                KnowledgeProvider.db.updateKnowledge(
+                                    new Knowledge(
+                                        id: widget.knowledge.id,
+                                        criterio: nameEditingController.text,
+                                        idArea: widget.knowledge.idArea,
+                                        idTurma: widget.knowledge.idTurma,
+                                        isAvaliado:
+                                            widget.knowledge.isAvaliado));
+                                Navigator.pop(context);
+                              });
                             } else {
                               await KnowledgeProvider.db.addKnowledgeToDatabase(
                                   new Knowledge(
                                       criterio: nameEditingController.text,
-                                  idArea: widget.idArea,
-                                    idTurma: widget.idTurma,
-                                    isAvaliado: 0
-                                  ));
+                                      idArea: widget.idArea,
+                                      idTurma: widget.idTurma,
+                                      isAvaliado: 0));
                               Navigator.pop(context);
                             }
                           },
@@ -123,6 +127,12 @@ class _EditAddKnowledgeState extends State<AddKnowledge> {
             ),
           )),
     );
+  }
+
+  void showSnackBar1() {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        backgroundColor: Colors.green,
+        content: Text('Critério adicionada com sucesso')));
   }
 
   textFormField(TextEditingController t, String label, String hint,
@@ -144,7 +154,7 @@ class _EditAddKnowledgeState extends State<AddKnowledge> {
             hintText: hint,
             labelText: label,
             border:
-            OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
+                OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
       ),
     );
   }
