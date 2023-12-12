@@ -34,8 +34,13 @@ class _AdicionarAlunoViewState extends State<StudentsPage> {
       body: FutureBuilder(
         future: StudentProvider.db.getAllStudentsClass(idClass.id),
         builder: (BuildContext context, AsyncSnapshot<List<Student>> snapshot) {
-          // INICIA AQUI
-          if (snapshot.data.length <= 0) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator(); // Mostrar um indicador de carregamento enquanto espera.
+          }
+
+          if (!snapshot.hasData ||
+              snapshot.data == null ||
+              snapshot.data.isEmpty) {
             return Center(child: Text('Nenhum item cadastrado'));
           }
 

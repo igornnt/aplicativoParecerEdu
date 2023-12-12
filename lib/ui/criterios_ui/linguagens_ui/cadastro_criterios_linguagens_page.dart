@@ -63,8 +63,10 @@ class CadastrarCriteriosLinguagensView extends StatelessWidget {
             child: Container(
               height: 40,
               width: MediaQuery.of(context).size.height,
-              child: RaisedButton(
-                color: Colors.blue,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.blue, // background
+                ),
                 child: Text(
                   "Cadastrar",
                   style: TextStyle(fontSize: 16, color: Colors.white),

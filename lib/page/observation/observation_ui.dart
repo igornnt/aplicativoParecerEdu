@@ -24,10 +24,9 @@ class _ObservationPageState extends State<ObservationPage> {
       body: FutureBuilder(
         future: StudentProvider.db.getAllStudentsClass(classSchool.id),
         builder: (BuildContext context, AsyncSnapshot<List<Student>> snapshot) {
-          if (snapshot.data.length <= 0) {
+          if (snapshot.data == null || snapshot.data.isEmpty) {
             return Center(child: Text('Nenhum item cadastrado'));
           }
-
           return ListView.builder(
             itemCount: snapshot.data != null ? snapshot.data.length : 0,
             itemBuilder: (context, index) {
@@ -53,9 +52,6 @@ class _ObservationPageState extends State<ObservationPage> {
                         dense: false,
                         enabled: true,
                         title: Text(snapshot.data[index].name),
-                        subtitle: Text("Observações registradas: " +
-                            newSnapshot.data.toString()),
-                        trailing: Icon(Icons.navigate_next),
                       );
                     },
                   ));

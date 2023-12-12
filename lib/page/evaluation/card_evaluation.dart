@@ -14,16 +14,15 @@ class EvaluationCard extends StatefulWidget {
 }
 
 class _EvaluationCardState extends State<EvaluationCard> {
-  bool isAvaliado = false;
-
+  Widget _criterioWidget;
   @override
   void initState() {
     super.initState();
-
-    // Verifica se o critério está avaliado
-    setState(() {
-      isAvaliado = widget.criterio.isAvaliado == 1;
-    });
+    if (widget.criterio.isAvaliado == 0) {
+      _criterioWidget = criterioNaoAvaliado();
+    } else {
+      _criterioWidget = criterioAvaliado();
+    }
   }
 
   @override
@@ -59,12 +58,44 @@ class _EvaluationCardState extends State<EvaluationCard> {
                   },
                 );
               } else {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => EvaluationActionPage(
-                          this.widget.criterio, this.widget.idArea),
-                    ));
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text("Atenção"),
+                      content: Text(
+                        "Ao iniciar uma avaliação você não pode cancelar, tem certeza que quer iniciar?",
+                      ),
+                      actions: <Widget>[
+                        TextButton(
+                          child: Text("Cancelar"),
+                          onPressed: () {
+                            Navigator.of(context).pop(); // Fecha o diálogo
+                          },
+                        ),
+                        TextButton(
+                          child: Text("Avaliar"),
+                          onPressed: () {
+                            Navigator.of(context).pop(); // Fecha o diálogo
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => EvaluationActionPage(
+                                  this.widget.criterio,
+                                  this.widget.idArea,
+                                ),
+                              ),
+                            );
+
+                            setState(() {
+                              _criterioWidget = criterioAvaliado();
+                            });
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
               }
             });
           } else {
@@ -89,10 +120,9 @@ class _EvaluationCardState extends State<EvaluationCard> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Container(
-                      alignment: Alignment.bottomLeft,
-                      child: widget.criterio.isAvaliado == 0
-                          ? criterioNaoAvaliado()
-                          : criterioAvaliado()),
+                    alignment: Alignment.bottomLeft,
+                    child: _criterioWidget,
+                  ),
                   Padding(
                     padding: const EdgeInsets.only(right: 30, bottom: 8),
                     child: Icon(

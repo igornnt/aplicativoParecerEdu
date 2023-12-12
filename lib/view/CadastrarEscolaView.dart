@@ -61,7 +61,7 @@ class CadastrarEscolaView extends StatelessWidget {
             child: Container(
               height: 40,
               width: MediaQuery.of(context).size.height,
-              child: RaisedButton(
+              child: ElevatedButton(
                 //Cor do botão
                 color: Colors.blue,
                 //O Texto que vai nele

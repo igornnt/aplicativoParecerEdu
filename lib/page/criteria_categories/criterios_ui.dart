@@ -52,7 +52,13 @@ class _CriterioPageState extends State<CriterioPage> {
             .timeout(Duration(seconds: 1)),
         builder:
             (BuildContext context, AsyncSnapshot<List<Knowledge>> snapshot) {
-          if (snapshot.data.length <= 0) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          }
+
+          if (!snapshot.hasData ||
+              snapshot.data == null ||
+              snapshot.data.isEmpty) {
             return Center(child: Text('Nenhum item cadastrado'));
           }
 

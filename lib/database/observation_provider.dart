@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:aplicativoescolas/model/observation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
@@ -29,7 +30,8 @@ class ObservationProvider{
               "idStudent integer,"
               "ano integer,"
               "mes integer,"
-              "dia integer"
+              "dia integer,"
+              "FOREIGN KEY (idStudent) REFERENCES Student(id)"
               ")");
         });
   }
@@ -86,6 +88,42 @@ class ObservationProvider{
   Future<int> countObservation(int idStudent) async {
     final db = await database;
     return Sqflite.firstIntValue(await db.rawQuery('SELECT COUNT(*) FROM Observation WHERE idStudent=$idStudent'));
+  }
+
+  backupDB() async {
+    var status = await Permission.storage.status;
+
+    if (!status.isGranted) {
+      await Permission.storage.request();
+    }
+
+    try {
+      String appDocumentsDir = (await getApplicationDocumentsDirectory()).path;
+      String observationDBPath = '$appDocumentsDir/observation.db';
+
+      File ourDBFile = File(observationDBPath);
+
+      await ourDBFile.copy("/storage/emulated/0/Download/observation.db");
+    } catch (e) {
+      print("========================= error ${e.toString()}");
+    }
+  }
+
+  restoreDB() async {
+    var status = await Permission.storage.status;
+
+    if (!status.isGranted) {
+      await Permission.storage.request();
+    }
+
+    try {
+      File saveDBFile = File("/storage/emulated/0/Download/observation.db");
+
+      await saveDBFile.copy(
+          "/data/user/0/com.example.aplicativoescolas/app_flutter/observation.db");
+    } catch (e) {
+      print("========================= error ${e.toString()}");
+    }
   }
 
 }

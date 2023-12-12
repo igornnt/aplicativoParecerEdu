@@ -1,10 +1,11 @@
 import 'dart:io';
 
-import 'package:aplicativoescolas/model/school.dart';
+import 'package:aplicativoescolas/model/class_school.dart';
 import 'package:aplicativoescolas/model/student.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:sqflite/sqflite.dart';
 
 class StudentProvider {
   StudentProvider._();
@@ -27,7 +28,8 @@ class StudentProvider {
       await db.execute("CREATE TABLE Student ("
           "id integer primary key AUTOINCREMENT,"
           "idClass integer,"
-          "name TEXT"
+          "name TEXT,"
+          "FOREIGN KEY (idClass) REFERENCES Class(id) ON DELETE CASCADE"
           ")");
     });
   }
@@ -49,11 +51,11 @@ class StudentProvider {
     return response;
   }
 
-//  Future<School> getSchoolWithId(int id) async {
-//    final db = await database;
-//    var response = await db.query("School", where: "id = ?", whereArgs: [id]);
-//    return response.isNotEmpty ? School.fromMap(response.first) : null;
-//  }
+  Future<ClassSchool> getSchoolWithId(int id) async {
+    final db = await database;
+    var response = await db.query("ClassSchool", where: "id = ?", whereArgs: [id]);
+    return response.isNotEmpty ? ClassSchool.fromMap(response.first) : null;
+  }
 
   Future<List<Student>> getAllStudentsClass(int id) async {
     final db = await database;
@@ -61,7 +63,6 @@ class StudentProvider {
     List<Student> list = response.map((c) => Student.fromMap(c)).toList();
     return list;
   }
-
 
   deleteStudentWithId(int id) async {
     final db = await database;
@@ -71,6 +72,47 @@ class StudentProvider {
   Future<int> countStudents(int idClass) async {
     final db = await database;
     return Sqflite.firstIntValue(await db.rawQuery('SELECT COUNT(*) FROM Student WHERE idClass=$idClass'));
+  }
+
+  deleteAllStudent() async {
+    final db = await database;
+    db.delete("Student");
+  }
+
+  backupDB() async {
+    var status = await Permission.storage.status;
+
+    if (!status.isGranted) {
+      await Permission.storage.request();
+    }
+
+    try {
+      String appDocumentsDir = (await getApplicationDocumentsDirectory()).path;
+      String studentDBPath = '$appDocumentsDir/student.db';
+
+      File ourDBFile = File(studentDBPath);
+
+      await ourDBFile.copy("/storage/emulated/0/Download/student.db");
+    } catch (e) {
+      print("========================= error ${e.toString()}");
+    }
+  }
+
+  restoreDB() async {
+    var status = await Permission.storage.status;
+
+    if (!status.isGranted) {
+      await Permission.storage.request();
+    }
+
+    try {
+      File saveDBFile = File("/storage/emulated/0/Download/student.db");
+
+      await saveDBFile.copy(
+          "/data/user/0/com.example.aplicativoescolas/app_flutter/student.db");
+    } catch (e) {
+      print("========================= error ${e.toString()}");
+    }
   }
 
 }

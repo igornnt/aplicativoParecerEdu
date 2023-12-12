@@ -1,21 +1,15 @@
+import 'package:flutter/material.dart';
+import 'package:progress_indicators/progress_indicators.dart';
+
 import 'package:aplicativoescolas/database/evaluation_provider.dart';
 import 'package:aplicativoescolas/database/knowledge_provider.dart';
 import 'package:aplicativoescolas/database/student_provider.dart';
 import 'package:aplicativoescolas/model/evaluation.dart';
 import 'package:aplicativoescolas/model/knowledge.dart';
 import 'package:aplicativoescolas/model/student.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_progress_button/flutter_progress_button.dart';
 
 class EvaluationActionPage extends StatefulWidget {
-  //criterio
-  //idCritério
-  //idAvaliação
-  //idAluno
-  //peso
-
   Knowledge knowledge;
-
   int idArea;
 
   EvaluationActionPage(this.knowledge, this.idArea);
@@ -37,6 +31,7 @@ class _EvaluationActionPageState extends State<EvaluationActionPage> {
   int qtdStudantes = 0;
   int avaliados = 0;
   Student student;
+
   @override
   void initState() {
     super.initState();
@@ -129,71 +124,81 @@ class _EvaluationActionPageState extends State<EvaluationActionPage> {
         centerTitle: true,
         elevation: 0,
         title: Text("Avaliação"),
+        automaticallyImplyLeading: false,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(20.0),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            TextButton(
-              onPressed: () {
-                print("Cancelar");
-              },
-              child: Text(
-                "Canc",
-                style: TextStyle(fontSize: 15, color: Colors.red),
-              ),
-            ),
             this.inicio == true
-                ? ProgressButton(
-                    defaultWidget: const Text('Confirmar',
-                        style: TextStyle(color: Colors.blue)),
-                    progressWidget: const CircularProgressIndicator(
-                        backgroundColor: Colors.white),
+                ? Container(
                     width: 196,
                     height: 40,
-                    onPressed: null)
-                : ProgressButton(
-                    defaultWidget: const Text('Confirmar',
-                        style: TextStyle(color: Colors.blue)),
-                    progressWidget: const CircularProgressIndicator(
-                        backgroundColor: Colors.white),
+                    child: ElevatedButton(
+                      onPressed: null,
+                      child: Text(
+                        'Confirmar',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                        ),
+                        elevation: 0,
+                        primary: Colors.white,
+                      ),
+                    ),
+                  )
+                : Container(
                     width: 196,
                     height: 40,
-                    color: Colors.blue,
-                    onPressed: () async {
-                      int score = await Future.delayed(
-                          const Duration(milliseconds: 1000), () => 42);
-                      return setState(() {
-                        reinicio();
-                        if (index < qtdStudantes - 1) {
-                          EvaluationProvider.db.addEvaluationToDatabase(
-                              new Evaluation(
-                                  idAluno: this.student.id,
-                                  idArea: this.idArea,
-                                  idCriterio: this.knowledge.id,
-                                  idClassSchool: this.knowledge.idTurma,
-                                  criterio: this.knowledge.criterio,
-                                  peso: this.peso));
-                          this.index++;
-                          avaliados++;
-                        } else {
-                          EvaluationProvider.db.addEvaluationToDatabase(
-                              new Evaluation(
-                                  idAluno: this.student.id,
-                                  idArea: this.idArea,
-                                  idCriterio: this.knowledge.id,
-                                  idClassSchool: this.knowledge.idTurma,
-                                  criterio: this.knowledge.criterio,
-                                  peso: this.peso));
-                          Knowledge novo = knowledge;
-                          novo.isAvaliado = 1;
-                          KnowledgeProvider.db.updateKnowledge(novo);
-                          Navigator.of(context).pop();
-                        }
-                      });
-                    },
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        int score = await Future.delayed(
+                            const Duration(milliseconds: 1000), () => 42);
+                        return setState(() {
+                          reinicio();
+                          if (index < qtdStudantes - 1) {
+                            EvaluationProvider.db.addEvaluationToDatabase(
+                                new Evaluation(
+                                    idAluno: this.student.id,
+                                    idArea: this.idArea,
+                                    idCriterio: this.knowledge.id,
+                                    idClassSchool: this.knowledge.idTurma,
+                                    criterio: this.knowledge.criterio,
+                                    peso: this.peso));
+                            this.index++;
+                            avaliados++;
+                          } else {
+                            EvaluationProvider.db.addEvaluationToDatabase(
+                                new Evaluation(
+                                    idAluno: this.student.id,
+                                    idArea: this.idArea,
+                                    idCriterio: this.knowledge.id,
+                                    idClassSchool: this.knowledge.idTurma,
+                                    criterio: this.knowledge.criterio,
+                                    peso: this.peso));
+                            Knowledge novo = knowledge;
+                            novo.isAvaliado = 1;
+                            KnowledgeProvider.db.updateKnowledge(novo);
+                            Navigator.of(context).pop();
+                          }
+                        });
+                      },
+                      child: Text(
+                        'Confirmar',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                        ),
+                        elevation: 0,
+                        primary: Colors.blue,
+                      ),
+                    ),
                   ),
           ],
         ),
@@ -208,6 +213,20 @@ class _EvaluationActionPageState extends State<EvaluationActionPage> {
             future: StudentProvider.db.getAllStudentsClass(knowledge.idTurma),
             builder:
                 (BuildContext context, AsyncSnapshot<List<Student>> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator(); // ou outro indicador de carregamento
+              } else if (snapshot.hasError) {
+                return Text('Erro: ${snapshot.error}');
+              } else if (!snapshot.hasData) {
+                return Text('Nenhum dado disponível');
+              }
+
+              List<Student> students = snapshot.data;
+
+              if (index >= students.length) {
+                return Text('Índice fora dos limites');
+              }
+
               this.student = snapshot.data[index];
               return Center(
                   child: Text(

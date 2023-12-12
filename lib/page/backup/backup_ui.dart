@@ -1,17 +1,54 @@
-import 'dart:io';
-
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:sqflite/sqflite.dart';
 
+import '../../database/observation_provider.dart';
+import '../../database/evaluation_provider.dart';
+import '../../database/knowledge_provider.dart';
+import '../../database/student_provider.dart';
 import '../../database/class_school_provider.dart';
 import '../../database/school_provider.dart';
 
 class BackupUi extends StatelessWidget {
   const BackupUi({Key key}) : super(key: key);
+
+  void showBackupSuccessDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Backup Realizado"),
+          content: Text("O backup dos dados foi realizado com sucesso."),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text("Fechar"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void showRestoreSuccessDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Dados Restaurados"),
+          content: Text("Atenção!! Feche e reinicie o seu PadecerEdu app."),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text("Fechar"),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,16 +69,26 @@ class BackupUi extends StatelessWidget {
                     SizedBox(height: 30),
                     ElevatedButton(
                       onPressed: () {
+                        ObservationProvider.db.backupDB();
+                        EvaluationProvider.db.backupDB();
+                        KnowledgeProvider.db.backupDB();
+                        StudentProvider.db.backupDB();
                         ClassProvider.db.backupDB();
                         SchoolDatabaseProvider.db.backupDB();
+                        showBackupSuccessDialog(context);
                       },
                       child: const Text('Realizar backup '),
                     ),
                     SizedBox(height: 20),
                     ElevatedButton(
                       onPressed: () {
-                        SchoolDatabaseProvider.db.restoreDB();
                         ClassProvider.db.restoreDB();
+                        SchoolDatabaseProvider.db.restoreDB();
+                        StudentProvider.db.restoreDB();
+                        KnowledgeProvider.db.restoreDB();
+                        EvaluationProvider.db.restoreDB();
+                        ObservationProvider.db.restoreDB();
+                        showRestoreSuccessDialog(context);
                       },
                       child: const Text('Recuperar dados'),
                     ),

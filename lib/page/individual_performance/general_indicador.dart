@@ -205,8 +205,7 @@ class _LineChartSample2State extends State<LineChartSample2> {
     PdfFont subHeadingFont = PdfStandardFont(PdfFontFamily.timesRoman, 14);
 
 //Creates a text element to add the invoice number
-    PdfTextElement element =
-        PdfTextElement(text: 'ESCOLA DEMÉTRIO', font: subHeadingFont);
+    PdfTextElement element = PdfTextElement(text: '-', font: subHeadingFont);
     element.brush = PdfBrushes.white;
 
 //Draws the heading on the page
@@ -241,7 +240,7 @@ class _LineChartSample2State extends State<LineChartSample2> {
 
     PdfFont timesRoman = PdfStandardFont(PdfFontFamily.timesRoman, 10);
 
-    element = PdfTextElement(text: 'TURMA 103', font: timesRoman);
+    element = PdfTextElement(text: '-', font: timesRoman);
     element.brush = PdfBrushes.black;
 
     result = element.draw(

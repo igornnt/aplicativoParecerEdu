@@ -42,7 +42,9 @@ class _RatingCriteriaPageState extends State<RatingCriteriaPage> {
               .timeout(Duration(seconds: 1)),
           builder:
               (BuildContext context, AsyncSnapshot<List<Knowledge>> snapshot) {
-            if (snapshot.data.length <= 0) {
+            if (!snapshot.hasData ||
+                snapshot.data == null ||
+                snapshot.data.isEmpty) {
               return Center(child: Text('Nenhum item cadastrado'));
             }
 

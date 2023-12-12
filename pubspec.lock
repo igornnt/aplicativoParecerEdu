@@ -29,10 +29,10 @@ packages:
     dependency: transitive
     description:
       name: charcode
-      sha256: fb98c0f6d12c920a02ee2d998da788bca066ca5f148492b7085ee23372b12306
+      sha256: "8e36feea6de5ea69f2199f29cf42a450a855738c498b57c0b980e2d3cca9c362"
       url: "https://pub.dev"
     source: hosted
-    version: "1.3.1"
+    version: "1.2.0"
   clock:
     dependency: transitive
     description:
@@ -61,10 +61,10 @@ packages:
     dependency: transitive
     description:
       name: crypto
-      sha256: aa274aa7774f8964e4f4f38cc994db7b6158dd36e9187aaceaddc994b35c6c67
+      sha256: cf75650c66c0316274e21d7c43d3dea246273af5955bd94e8184837cd577575c
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.2"
+    version: "3.0.1"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -77,10 +77,10 @@ packages:
     dependency: transitive
     description:
       name: dots_indicator
-      sha256: e36a95932a026422e2d148ddae8ca0d19e5be4299956904a071a5a7aa3e6ff7d
+      sha256: f1599baa429936ba87f06ae5f2adc920a367b16d08f74db58c3d0f6e93bcdb5c
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.0"
+    version: "2.1.2"
   equatable:
     dependency: transitive
     description:
@@ -142,14 +142,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.11"
-  flutter_progress_button:
-    dependency: "direct main"
-    description:
-      name: flutter_progress_button
-      sha256: "8fa908540da4a082774aa7966ce7356e1d33338feaea7daece04d10138e0ab04"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.0"
   flutter_slidable:
     dependency: "direct main"
     description:
@@ -188,10 +180,10 @@ packages:
     dependency: "direct main"
     description:
       name: introduction_screen
-      sha256: "6e78dc6417c4e1b7efae194bb4babc197ede0ad3ddaf9b7b72eb7fb8b305a519"
+      sha256: "52df67044e660cc12643b47d2bfe2e57e2c5f1cb768f8744cb8c9aaf259597ed"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.9"
+    version: "2.1.0"
   js:
     dependency: transitive
     description:
@@ -340,10 +332,18 @@ packages:
     dependency: transitive
     description:
       name: process
-      sha256: "53fd8db9cec1d37b0574e12f07520d582019cb6c44abf5479a01505099a34a09"
+      sha256: ca157bb5ee3a2dce23ac17bac6d5e54c9d7d1b693f560b606a84aacd2f3c54f8
       url: "https://pub.dev"
     source: hosted
-    version: "4.2.4"
+    version: "4.2.3"
+  progress_indicators:
+    dependency: "direct main"
+    description:
+      name: progress_indicators
+      sha256: "930daf9a18c622b2a63205f5e914c9df2a557272a617a182b5fe3db32cce7446"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.5"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -505,10 +505,10 @@ packages:
     dependency: transitive
     description:
       name: typed_data
-      sha256: "26f87ade979c47a150c9eaab93ccd2bebe70a27dc0b4b29517f2904f04eb11a5"
+      sha256: "53bdf7e979cfbf3e28987552fd72f637e63f3c8724c9e56d9246942dc2fa36ee"
       url: "https://pub.dev"
     source: hosted
-    version: "1.3.1"
+    version: "1.3.0"
   vector_math:
     dependency: transitive
     description:
@@ -521,10 +521,10 @@ packages:
     dependency: transitive
     description:
       name: win32
-      sha256: c0e3a4f7be7dae51d8f152230b86627e3397c1ba8c3fa58e63d44a9f3edc9cef
+      sha256: "198196d2f4f7497c3ccf2f7b6bff46c8961ae83cd37f407c60bd29be5267ebaa"
       url: "https://pub.dev"
     source: hosted
-    version: "2.6.1"
+    version: "2.2.10"
   xdg_directories:
     dependency: transitive
     description:

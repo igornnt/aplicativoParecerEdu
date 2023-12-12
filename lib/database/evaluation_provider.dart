@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:aplicativoescolas/model/evaluation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
@@ -19,7 +20,7 @@ class EvaluationProvider {
 
   Future<Database> getDatabaseInstance() async {
     Directory directory = await getApplicationDocumentsDirectory();
-    String path = join(directory.path, "Evaluation.db");
+    String path = join(directory.path, "evaluation.db");
     return await openDatabase(path, version: 1,
         onCreate: (Database db, int version) async {
       await db.execute("CREATE TABLE evaluation ("
@@ -29,7 +30,10 @@ class EvaluationProvider {
           "idCriterio integer,"
           "criterio TEXT,"
           "idAluno integer,"
-          "peso REAL"
+          "peso REAL,"
+          "FOREIGN KEY (idClassSchool) REFERENCES Class(id),"
+          "FOREIGN KEY (idCriterio) REFERENCES Knowledge(id),"
+          "FOREIGN KEY (idAluno) REFERENCES Student(id)"
           ")");
     });
   }
@@ -81,5 +85,41 @@ class EvaluationProvider {
     final db = await database;
     return Sqflite.firstIntValue(await db.rawQuery(
         'SELECT COUNT(*) FROM Evaluation WHERE idCriterio=$criterioId AND peso=$peso'));
+  }
+
+  backupDB() async {
+    var status = await Permission.storage.status;
+
+    if (!status.isGranted) {
+      await Permission.storage.request();
+    }
+
+    try {
+      String appDocumentsDir = (await getApplicationDocumentsDirectory()).path;
+      String evaluationDBPath = '$appDocumentsDir/evaluation.db';
+
+      File ourDBFile = File(evaluationDBPath);
+
+      await ourDBFile.copy("/storage/emulated/0/Download/evaluation.db");
+    } catch (e) {
+      print("========================= error ${e.toString()}");
+    }
+  }
+
+  restoreDB() async {
+    var status = await Permission.storage.status;
+
+    if (!status.isGranted) {
+      await Permission.storage.request();
+    }
+
+    try {
+      File saveDBFile = File("/storage/emulated/0/Download/evaluation.db");
+
+      await saveDBFile.copy(
+          "/data/user/0/com.example.aplicativoescolas/app_flutter/evaluation.db");
+    } catch (e) {
+      print("========================= error ${e.toString()}");
+    }
   }
 }

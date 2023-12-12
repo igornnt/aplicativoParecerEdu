@@ -1,5 +1,7 @@
 import 'package:aplicativoescolas/home_page.dart';
 import 'package:aplicativoescolas/page/class/class_ui.dart';
+import 'package:aplicativoescolas/page/evaluation/card_evaluation.dart';
+import 'package:aplicativoescolas/page/evaluation/rating_criteria_ui.dart';
 import 'package:aplicativoescolas/page/menu/menu_ui.dart';
 import 'package:aplicativoescolas/page/observation/observation_list_ui.dart';
 import 'package:aplicativoescolas/page/observation/observation_ui.dart';
@@ -30,6 +32,7 @@ class MyApp extends StatelessWidget {
         '/observacao': (context) => ObservationPage(),
         '/add-observacao': (context) => ObservationListPage(),
         "/alunos-chart": (context) => AlunoViewChart(),
+        "/rating-criterio": (context) => RatingCriteriaPage(),
       },
     );
   }

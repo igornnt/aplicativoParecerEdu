@@ -39,6 +39,11 @@ class _ObservationListPageState extends State<ObservationListPage> {
           future: ObservationProvider.db.getAllObservationWithId(student.id),
           builder: (BuildContext context,
               AsyncSnapshot<List<Observation>> snapshot) {
+            if (!snapshot.hasData ||
+                snapshot.data == null ||
+                snapshot.data.isEmpty) {
+              return Center(child: Text('Nenhum item cadastrado'));
+            }
             return ListView.builder(
               itemCount: snapshot.data != null ? snapshot.data.length : 0,
               itemBuilder: (context, index) {
@@ -73,12 +78,15 @@ class _ObservationListPageState extends State<ObservationListPage> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
                                 children: [
-                                  Text(
-                                    snapshot.data[index].observation,
-                                    style: (TextStyle(
-                                        color: Colors.black, fontSize: 17.0)),
+                                  Expanded(
+                                    child: Text(
+                                      snapshot.data[index].observation,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 17.0,
+                                      ),
+                                    ),
                                   ),
-                                  SizedBox(width: 60),
                                   Row(
                                     children: [
                                       Column(
@@ -181,26 +189,6 @@ class _ObservationListPageState extends State<ObservationListPage> {
                                   ),
                                 ],
                               ),
-                              Container(
-                                margin: EdgeInsets.symmetric(
-                                    vertical: 5, horizontal: 25),
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      "Última atualização em " +
-                                          snapshot.data[index].dia.toString() +
-                                          "/" +
-                                          snapshot.data[index].mes.toString() +
-                                          "/" +
-                                          snapshot.data[index].ano.toString(),
-                                      style: TextStyle(
-                                        color: Colors.grey,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
                             ],
                           ),
                         ),

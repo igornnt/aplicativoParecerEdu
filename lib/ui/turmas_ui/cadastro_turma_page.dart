@@ -74,9 +74,11 @@ class AdicionaTurma extends StatelessWidget {
             child: Container(
               height: 40,
               width: MediaQuery.of(context).size.height,
-              child: RaisedButton(
+              child: ElevatedButton(
                 //Cor do botão
-                color: Colors.blue,
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.blue,
+                ),
                 //O Texto que vai nele
                 child: Text(
                   "Cadastrar",

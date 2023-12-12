@@ -34,63 +34,130 @@ class _ClassSchoolPageState extends State<ClassSchoolPage> {
         builder:
             // ignore: missing_return
             (BuildContext context, AsyncSnapshot<List<ClassSchool>> snapshot) {
-          if (snapshot.data.length <= 0) {
+          if (!snapshot.hasData ||
+              snapshot.data == null ||
+              snapshot.data.isEmpty) {
             return Center(child: Text('Nenhum item cadastrado'));
           }
 
-          if (snapshot.hasData) {
-            return ListView.builder(
-              itemCount: snapshot.data != null ? snapshot.data.length : 0,
-              itemBuilder: (context, index) {
-                ClassSchool item = snapshot.data[index];
+          return ListView.builder(
+            itemCount: snapshot.data.length,
+            itemBuilder: (context, index) {
+              ClassSchool item = snapshot.data[index];
 
-                //COMEÇA AQUI
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all<Color>(Colors.white),
-                        ),
-                        onPressed: () => {
-                          Navigator.pushNamed(context, '/menu', arguments: item)
-                        },
+              //COMEÇA AQUI
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.white),
+                      ),
+                      onPressed: () => {
+                        Navigator.pushNamed(context, '/menu', arguments: item)
+                      },
+                      child: Container(
                         child: Container(
-                          child: Container(
-                            decoration: BoxDecoration(
-                                border: new BorderDirectional(
-                              bottom: BorderSide(
-                                color: Colors.transparent,
-                                width: 1.5,
+                          decoration: BoxDecoration(
+                              border: new BorderDirectional(
+                            bottom: BorderSide(
+                              color: Colors.transparent,
+                              width: 1.5,
+                            ),
+                          )),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    snapshot.data[index].name,
+                                    style: (TextStyle(
+                                        color: Colors.black, fontSize: 17.0)),
+                                  ),
+                                ],
                               ),
-                            )),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      snapshot.data[index].name,
-                                      style: (TextStyle(
-                                          color: Colors.black, fontSize: 17.0)),
+                              SizedBox(width: 60),
+                              Column(
+                                children: [
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      classEditText.text = "";
+                                      classEditText.text =
+                                          snapshot.data[index].name;
+                                      show(
+                                          limpar: false,
+                                          index: snapshot.data[index].id);
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      primary: Colors.transparent,
+                                      elevation: 0.0,
+                                      shadowColor: Colors.transparent,
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 5, horizontal: 2),
                                     ),
-                                  ],
-                                ),
-                                SizedBox(width: 60),
-                                Column(
-                                  children: [
-                                    ElevatedButton(
+                                    child: Icon(
+                                      Icons.edit,
+                                      color: Colors.blue,
+                                      size: 24.0,
+                                    ),
+                                  ),
+                                  ElevatedButton(
                                       onPressed: () {
-                                        classEditText.text = "";
-                                        classEditText.text =
-                                            snapshot.data[index].name;
-                                        show(
-                                            limpar: false,
-                                            index: snapshot.data[index].id);
+                                        showDialog(
+                                            context: context,
+                                            builder: (context) => AlertDialog(
+                                                    title: Text(
+                                                        "Excluir esta turma"),
+                                                    content: Text(
+                                                        "Você tem certeza disso?"),
+                                                    actions: [
+                                                      TextButton(
+                                                          onPressed: () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                          },
+                                                          style: TextButton
+                                                              .styleFrom(
+                                                                  foregroundColor:
+                                                                      Colors
+                                                                          .blue),
+                                                          child:
+                                                              Text("Cancelar")),
+                                                      TextButton(
+                                                          onPressed: () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                            ScaffoldMessenger
+                                                                    .of(context)
+                                                                .showSnackBar(SnackBar(
+                                                                    backgroundColor:
+                                                                        Colors
+                                                                            .red,
+                                                                    content: Text(
+                                                                        'Turma excluída com sucesso')));
+                                                            setState(() {
+                                                              ClassProvider.db
+                                                                  .deleteClassWithId(
+                                                                      snapshot
+                                                                          .data[
+                                                                              index]
+                                                                          .id);
+                                                            });
+                                                          },
+                                                          style: TextButton
+                                                              .styleFrom(
+                                                                  foregroundColor:
+                                                                      Colors
+                                                                          .red),
+                                                          child: Text("Sim")),
+                                                    ]));
                                       },
                                       style: ElevatedButton.styleFrom(
                                         primary: Colors.transparent,
@@ -100,90 +167,22 @@ class _ClassSchoolPageState extends State<ClassSchoolPage> {
                                             vertical: 5, horizontal: 2),
                                       ),
                                       child: Icon(
-                                        Icons.edit,
-                                        color: Colors.blue,
+                                        Icons.delete,
+                                        color: Colors.red[600],
                                         size: 24.0,
-                                      ),
-                                    ),
-                                    ElevatedButton(
-                                        onPressed: () {
-                                          showDialog(
-                                              context: context,
-                                              builder: (context) => AlertDialog(
-                                                      title: Text(
-                                                          "Excluir esta turma"),
-                                                      content: Text(
-                                                          "Você tem certeza disso?"),
-                                                      actions: [
-                                                        TextButton(
-                                                            onPressed: () {
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                            },
-                                                            style: TextButton
-                                                                .styleFrom(
-                                                                    foregroundColor:
-                                                                        Colors
-                                                                            .blue),
-                                                            child: Text(
-                                                                "Cancelar")),
-                                                        TextButton(
-                                                            onPressed: () {
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                              ScaffoldMessenger
-                                                                      .of(
-                                                                          context)
-                                                                  .showSnackBar(SnackBar(
-                                                                      backgroundColor:
-                                                                          Colors
-                                                                              .red,
-                                                                      content: Text(
-                                                                          'Turma excluída com sucesso')));
-                                                              setState(() {
-                                                                ClassProvider.db
-                                                                    .deleteClassWithId(
-                                                                        snapshot
-                                                                            .data[index]
-                                                                            .id);
-                                                              });
-                                                            },
-                                                            style: TextButton
-                                                                .styleFrom(
-                                                                    foregroundColor:
-                                                                        Colors
-                                                                            .red),
-                                                            child: Text("Sim")),
-                                                      ]));
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          primary: Colors.transparent,
-                                          elevation: 0.0,
-                                          shadowColor: Colors.transparent,
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 5, horizontal: 2),
-                                        ),
-                                        child: Icon(
-                                          Icons.delete,
-                                          color: Colors.red[600],
-                                          size: 24.0,
-                                        )),
-                                  ],
-                                ),
-                              ],
-                            ),
+                                      )),
+                                ],
+                              ),
+                            ],
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                );
-              },
-            );
-          }
-          ;
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
         },
       ),
       floatingActionButton: FloatingActionButton(

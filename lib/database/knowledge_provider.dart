@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:aplicativoescolas/model/knowledge.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -20,10 +21,10 @@ class KnowledgeProvider{
 
   Future<Database> getDatabaseInstance() async {
     Directory directory = await getApplicationDocumentsDirectory();
-    String path = join(directory.path, "Knowledge.db");
+    String path = join(directory.path, "knowledge.db");
     return await openDatabase(path, version: 1,
         onCreate: (Database db, int version) async {
-          await db.execute("CREATE TABLE knowledge ("
+          await db.execute("CREATE TABLE Knowledge ("
               "id integer primary key AUTOINCREMENT,"
               "criterio TEXT,"
               "idArea integer,"
@@ -79,16 +80,39 @@ updateKnowledge(Knowledge knowledge) async {
    return db.delete("Knowledge", where: "id = ?", whereArgs: [id]);
  }
 
-//
-//  deleteAllSchool() async {
-//    final db = await database;
-//    db.delete("School");
-//  }
-//
-//  Future<int> countClass(int idSchool) async {
-//    var count = await ClassProvider.db.countClass(idSchool);
-//    return count;
-//  }
+ backupDB() async {
+    var status = await Permission.storage.status;
 
+    if (!status.isGranted) {
+      await Permission.storage.request();
+    }
 
+    try {
+      String appDocumentsDir = (await getApplicationDocumentsDirectory()).path;
+      String knowledgeDBPath = '$appDocumentsDir/knowledge.db';
+
+      File ourDBFile = File(knowledgeDBPath);
+      
+      await ourDBFile.copy("/storage/emulated/0/Download/knowledge.db");
+    } catch (e) {
+      print("========================= error ${e.toString()}");
+    }
+  }
+
+  restoreDB() async {
+    var status = await Permission.storage.status;
+
+    if (!status.isGranted) {
+      await Permission.storage.request();
+    }
+
+    try {
+      File saveDBFile = File("/storage/emulated/0/Download/knowledge.db");
+      
+      await saveDBFile.copy(
+          "/data/user/0/com.example.aplicativoescolas/app_flutter/knowledge.db");
+    } catch (e) {
+      print("========================= error ${e.toString()}");
+    }
+  }
 }

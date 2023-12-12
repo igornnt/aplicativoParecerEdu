@@ -28,7 +28,8 @@ class ClassProvider {
       await db.execute("CREATE TABLE Class ("
           "id integer primary key AUTOINCREMENT,"
           "name TEXT,"
-          "idSchool integer"
+          "idSchool integer,"
+          "FOREIGN KEY (idSchool) REFERENCES School(id) ON DELETE CASCADE"
           ")");
     });
   }
@@ -76,51 +77,18 @@ class ClassProvider {
   }
 
   backupDB() async {
-    // Future<List<ClassSchool>> listClassSchool = getAllClass();
-
-//Verifica permissão ao usuário se pode mexer no storage do celular
     var status = await Permission.storage.status;
-// Se não for permitido, solicita ao usuário
 
     if (!status.isGranted) {
       await Permission.storage.request();
     }
 
     try {
-      Directory appDocumentsDir = await getApplicationDocumentsDirectory();
-      String classDBPath = join(appDocumentsDir.path, 'class.db');
-      String appDBPath = join(appDocumentsDir.path, 'app.db');
+      String appDocumentsDir = (await getApplicationDocumentsDirectory()).path;
+      String classDBPath = '$appDocumentsDir/class.db';
 
-      // Abra a conexão com o banco de dados "class.db"
-      var classDB = await getDatabaseInstance();
-
-      // Execute a consulta para obter todas as turmas
-      var turmas = await classDB.query('Class');
-
-      // Abra a conexão com o banco de dados "app.db"
-      var appDB = await openDatabase(appDBPath);
-
-      // Copie os dados das turmas para o banco de dados "app.db"
-      for (var turma in turmas) {
-        // Verifique se a escola da turma já existe no banco de dados "app.db"
-        var escola = await appDB
-            .rawQuery('SELECT * FROM School WHERE id = ?', [turma['idSchool']]);
-
-        if (escola.isNotEmpty) {
-          // Se a escola já existe, insira apenas a turma
-          await appDB.rawInsert(
-              'INSERT INTO Class (id, idSchool, name) VALUES (?, ?, ?)',
-              [turma['id'], turma['idSchool'], turma['name']]);
-        } else {
-          // Se a escola não existe, insira a escola e a turma separadamente
-          await appDB.rawInsert('INSERT INTO School (id, name) VALUES (?, ?)',
-              [turma['idSchool'], turma['schoolName']]);
-
-          await appDB.rawInsert(
-              'INSERT INTO Class (id, idSchool, name) VALUES (?, ?, ?)',
-              [turma['id'], turma['idSchool'], turma['name']]);
-        }
-      }
+      File ourDBFile = File(classDBPath);
+      await ourDBFile.copy("/storage/emulated/0/Download/class.db");
     } catch (e) {
       print("========================= error ${e.toString()}");
     }

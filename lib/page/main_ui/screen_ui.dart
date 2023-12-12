@@ -3,15 +3,13 @@ import 'package:introduction_screen/introduction_screen.dart';
 
 import '../../home_page.dart';
 
-
-
 class ScreenFirst extends StatefulWidget {
   @override
   _ScreenFirstState createState() => _ScreenFirstState();
 }
 
-class _ScreenFirstState extends State<ScreenFirst>  {
-final introKey = GlobalKey<IntroductionScreenState>();
+class _ScreenFirstState extends State<ScreenFirst> {
+  final introKey = GlobalKey<IntroductionScreenState>();
 
   void _onIntroEnd(context) {
     Navigator.of(context).push(
@@ -41,16 +39,16 @@ final introKey = GlobalKey<IntroductionScreenState>();
       key: introKey,
       pages: [
         PageViewModel(
-          title: "Utilize para adicionar algo",
+          title: "Novidade!! Backup",
           body:
-              "Você pode utilizar sempre que precisar adicionar alguma informação",
+              "Agora você pode salvar em seu celular o restaurar seus dados, em apenas um click!",
           image: _buildImage('mais'),
           decoration: pageDecoration,
         ),
-                PageViewModel(
-          title: "Deslize para mais opções",
+        PageViewModel(
+          title: "Novidade!! Salve e compartilhe",
           body:
-              "Você pode deslizar seu dedo nas escola, turmas, alunos, criterios e observações para editar ou excluir informações",
+              "Agora é possível baixar e compartilhar os resultados de suas turmas",
           image: _buildImage('deslizar'),
           decoration: pageDecoration,
         ),
@@ -59,9 +57,10 @@ final introKey = GlobalKey<IntroductionScreenState>();
       showSkipButton: true,
       skipFlex: 0,
       nextFlex: 0,
-      skip: const Text('Pular instrução'),
+      skip: const Text('Pular introdução'),
       next: const Icon(Icons.arrow_forward),
-      done: const Text('Entendi', style: TextStyle(fontWeight: FontWeight.w600)),
+      done:
+          const Text('Entendi', style: TextStyle(fontWeight: FontWeight.w600)),
       dotsDecorator: const DotsDecorator(
         size: Size(10.0, 10.0),
         color: Color(0xFFBDBDBD),
@@ -72,5 +71,4 @@ final introKey = GlobalKey<IntroductionScreenState>();
       ),
     );
   }
-
 }

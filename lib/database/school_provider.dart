@@ -80,9 +80,7 @@ class SchoolDatabaseProvider {
   }
 
   backupDB() async {
-//Verifica permissão ao usuário se pode mexer no storage do celular
     var status = await Permission.storage.status;
-// Se não for permitido, solicita ao usuário
 
     if (!status.isGranted) {
       await Permission.storage.request();
@@ -92,11 +90,9 @@ class SchoolDatabaseProvider {
       String appDocumentsDir = (await getApplicationDocumentsDirectory()).path;
       String schoolDBPath = '$appDocumentsDir/school.db';
 
-      print("====" + schoolDBPath);
-
       File ourDBFile = File(schoolDBPath);
 
-      await ourDBFile.copy("/storage/emulated/0/Download/app.db");
+      await ourDBFile.copy("/storage/emulated/0/Download/school.db");
     } catch (e) {
       print("========================= error ${e.toString()}");
     }

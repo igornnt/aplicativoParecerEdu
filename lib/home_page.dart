@@ -46,7 +46,9 @@ class _HomePageState extends State<HomePage> {
       body: FutureBuilder<List<School>>(
         future: SchoolDatabaseProvider.db.getAllSchool(),
         builder: (BuildContext context, AsyncSnapshot<List<School>> snapshot) {
-          if (snapshot.data.length <= 0) {
+          if (!snapshot.hasData ||
+              snapshot.data == null ||
+              snapshot.data.isEmpty) {
             return Center(child: Text('Nenhum item cadastrado'));
           }
 
@@ -92,25 +94,6 @@ class _HomePageState extends State<HomePage> {
                                       snapshot.data[index].name,
                                       style: (TextStyle(
                                           color: Colors.black, fontSize: 17.0)),
-                                    ),
-                                    FutureBuilder<int>(
-                                      future: SchoolDatabaseProvider.db
-                                          .countClass(snapshot.data[index].id),
-                                      builder: (context, snapshot) {
-                                        if (snapshot.hasData) {
-                                          return Text(
-                                            snapshot.data.toString() +
-                                                " turmas cadastradas",
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 17.0,
-                                              fontWeight: FontWeight.w300,
-                                            ),
-                                          );
-                                        } else {
-                                          return CircularProgressIndicator();
-                                        }
-                                      },
                                     ),
                                   ],
                                 ),

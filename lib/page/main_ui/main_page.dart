@@ -45,14 +45,6 @@ class _MainPageState extends State<MainPage> {
       body: Stack(
         children: <Widget>[
           Center(
-            child: new Image.asset(
-              '',
-              width: size.width,
-              height: size.height,
-              fit: BoxFit.fill,
-            ),
-          ),
-          Center(
               child: new Image.asset(
             'resource/logo.png',
             height: 150,

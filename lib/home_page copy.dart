@@ -43,7 +43,9 @@ class _HomePageState extends State<HomePage> {
       body: FutureBuilder<List<School>>(
         future: SchoolDatabaseProvider.db.getAllSchool(),
         builder: (BuildContext context, AsyncSnapshot<List<School>> snapshot) {
-          if (snapshot.data.length <= 0) {
+          if (!snapshot.hasData ||
+              snapshot.data == null ||
+              snapshot.data.isEmpty) {
             return Center(child: Text('Nenhum item cadastrado'));
           }
 
